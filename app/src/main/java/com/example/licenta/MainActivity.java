@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.licenta.Models.Pacient;
 import com.example.licenta.Utils.APICommunication;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvUserName;
     private FirebaseAuth mAuth;
     private CardView allMedicsCard;
+    private ImageView imgProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         tvUserName = findViewById(R.id.txtForNameDisplay);
         allMedicsCard = findViewById(R.id.allMedicsCard);
+        imgProfile = findViewById(R.id.userProfile);
         allMedicsCard.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, MedicsListActivity.class));
         });
@@ -45,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         if(user == null){
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }else{
-            Toast.makeText(this, "Welcome "+user.getUid(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Welcome "+user.getUid(), Toast.LENGTH_SHORT).show();
             APICommunication.getPacient(user.getUid(),getApplicationContext());
             final Handler handler = new Handler(Looper.getMainLooper());
             handler.postDelayed(new Runnable() {
@@ -74,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         tvUserName.setText(p.getFirstName()+" "+p.getLastName());
+        Glide.with(this).asBitmap().load(p.getPhoto()).into(imgProfile);
     }
 
     @Override

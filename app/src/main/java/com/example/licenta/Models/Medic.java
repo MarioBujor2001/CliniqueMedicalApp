@@ -53,7 +53,7 @@ public class Medic extends Persoana{
 
     @Override
     public String toString() {
-        return "Medic{" +
+        return super.toString()+"Medic{" +
                 "specialitati=" + specialitati +
                 ", vechime=" + vechime +
                 ", rating=" + rating +
