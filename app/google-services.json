@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "103297383867",
+    "project_id": "licenta-de2d1",
+    "storage_bucket": "licenta-de2d1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103297383867:android:0bb1566040865a3377189e",
+        "android_client_info": {
+          "package_name": "com.example.licenta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "103297383867-81u5ft837cm8cstcsolbeulpo7el4k1n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzs-Ql4X3QrbI_PwwdJvw6ygJETSqpj4U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "103297383867-81u5ft837cm8cstcsolbeulpo7el4k1n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

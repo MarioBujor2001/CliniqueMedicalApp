@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity">
+
+    <TextView
+        android:id="@+id/txtLetsMake"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/letsMakeAccount"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01999998" />
+
+    <EditText
+        android:id="@+id/edtRegisterFirstName"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:hint="@string/first_name"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@+id/txtLetsMake"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/txtLetsMake"
+        app:layout_constraintTop_toBottomOf="@+id/txtLetsMake" />
+
+    <EditText
+        android:id="@+id/edtRegisterLastName"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:hint="@string/last_name"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@+id/edtRegisterFirstName"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/edtRegisterFirstName"
+        app:layout_constraintTop_toBottomOf="@+id/edtRegisterFirstName" />
+
+    <EditText
+        android:id="@+id/edtAge"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:hint="@string/age"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="@+id/edtRegisterLastName"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/edtRegisterLastName"
+        app:layout_constraintTop_toBottomOf="@+id/edtRegisterLastName" />
+
+    <EditText
+        android:id="@+id/edtCNP"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:hint="@string/cnp"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="@+id/edtAge"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/edtAge"
+        app:layout_constraintTop_toBottomOf="@+id/edtAge" />
+
+    <EditText
+        android:id="@+id/edtAddress"
+        android:layout_width="300dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="15dp"
+        android:hint="@string/address"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@+id/edtCNP"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/edtCNP"
+        app:layout_constraintTop_toBottomOf="@+id/edtCNP" />
+    <EditText
+        android:id="@+id/edtRegEmail"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:hint="@string/emailHint"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="@+id/edtAddress"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/edtAddress"
+        app:layout_constraintTop_toBottomOf="@+id/edtAddress" />
+    <EditText
+        android:id="@+id/edtRegPass1"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:hint="@string/passwordHint"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/edtRegEmail"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/edtRegEmail"
+        app:layout_constraintTop_toBottomOf="@+id/edtRegEmail" />
+
+    <EditText
+        android:id="@+id/edtRegPass2"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:hint="@string/repeat_password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/edtRegPass1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/edtRegPass1"
+        app:layout_constraintTop_toBottomOf="@+id/edtRegPass1" />
+
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/registerPrompt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtRegPass2" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
