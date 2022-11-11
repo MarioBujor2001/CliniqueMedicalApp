@@ -1,23 +1,22 @@
 package com.example.licenta.Models;
 
 public enum Specialitati {
-
-    ORL,
-    Alergologie,
-    Cardiologie,
-    Chirurgie,
-    Cosmetica,
-    Dermatologie,
-    Endocrinologie,
-    Gastroenterologie,
-    Kinetoterapie,
-    MedicinaFamilie,
-    Nefrologie,
-    Neurologie,
-    ObstreticaGinecologie,
-    Oftalmologie,
-    Pediatrie,
-    Pneumologie,
-    Urologie
+    orl,
+    alergologie,
+    cardiologie,
+    chirurgie,
+    cosmetica,
+    dermatologie,
+    endocrinologie,
+    gastroenterologie,
+    kinetoterapie,
+    medicinaFamilie,
+    nefrologie,
+    neurologie,
+    obstreticaGinecologie,
+    oftalmologie,
+    pediatrie,
+    pneumologie,
+    urologie
 
 }

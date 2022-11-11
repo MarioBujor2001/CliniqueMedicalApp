@@ -52,7 +52,10 @@ public class MedicAdapter extends RecyclerView.Adapter<MedicAdapter.ViewHolder> 
                 .load(medici.get(position).getPhoto())
                 .into(holder.imgMedicProfile);
         holder.txtMedicName.setText(medici.get(position).getFirstName() + " " + medici.get(position).getLastName());
-//        holder.txtMedicSpec.setText(medici.get(position).getSpecialitati().get(0).toString());
+        if(medici.get(position).getSpecialitati().size()>0 && medici.get(position).getSpecialitati().get(0)!=null){
+            holder.txtMedicSpec.setText(medici.get(position).getSpecialitati().get(0).getTip().toString().toUpperCase());
+        }
+//        holder.txtMedicSpec.setText(medici.get(position).getSpecialitati().get(0).getTip().toString().toUpperCase());
         holder.txtMedicRating.setText("⭐"+medici.get(position).getRating().toString());
         Log.i("debug", "am ajuns aici");
     }

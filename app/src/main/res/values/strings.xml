@@ -19,4 +19,5 @@
     <string name="specialitate_placeholder">Specialitate</string>
     <string name="_4_5">⭐4.5</string>
     <string name="our_doctors">Our Doctors</string>
+    <string name="loading">Loading...</string>
 </resources>

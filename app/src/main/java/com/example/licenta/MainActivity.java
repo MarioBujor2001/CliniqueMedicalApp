@@ -3,6 +3,7 @@ package com.example.licenta;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
@@ -28,18 +29,26 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private CardView allMedicsCard;
     private ImageView imgProfile;
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Main");
         mAuth = FirebaseAuth.getInstance();
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
         tvUserName = findViewById(R.id.txtForNameDisplay);
         allMedicsCard = findViewById(R.id.allMedicsCard);
         imgProfile = findViewById(R.id.userProfile);
         allMedicsCard.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, MedicsListActivity.class));
         });
+
     }
 
     @Override
@@ -80,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         }
         tvUserName.setText(p.getFirstName()+" "+p.getLastName());
         Glide.with(this).asBitmap().load(p.getPhoto()).into(imgProfile);
+        progressDialog.dismiss();
     }
 
     @Override

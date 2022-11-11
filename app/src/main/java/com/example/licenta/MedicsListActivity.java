@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
 import com.example.licenta.Models.Medic;
+import com.example.licenta.Models.Specialitate;
+import com.example.licenta.Models.Specialitati;
 import com.example.licenta.Utils.APICommunication;
 
 import org.json.JSONArray;
@@ -22,10 +25,17 @@ public class MedicsListActivity extends AppCompatActivity {
     private RecyclerView recvMedici;
     private ArrayList<Medic> medici;
     private MedicAdapter adapter;
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medics_list);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
         medici = new ArrayList<>();
         APICommunication.getMedics(getApplicationContext());
         recvMedici = findViewById(R.id.recvMedics);
@@ -53,6 +63,15 @@ public class MedicsListActivity extends AppCompatActivity {
                 m.setCNP(currentMedic.getString("cnp"));
                 m.setRating((float) currentMedic.getDouble("rating"));
                 m.setVechime(currentMedic.getInt("vechime"));
+                if(currentMedic.getJSONArray("specialitati").length()>0 && currentMedic.getJSONArray("specialitati").get(0)!=null){
+                    try{
+                        JSONObject obj = (JSONObject) currentMedic.getJSONArray("specialitati").get(0);
+                        obj.getString("tip");
+                        m.getSpecialitati().add(new Specialitate(Specialitati.valueOf(obj.getString("tip")),obj.getString("descriere")));
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
                 medici.add(m);
                 Log.i("medic",m.toString());
             }
@@ -60,6 +79,7 @@ public class MedicsListActivity extends AppCompatActivity {
             adapter.setMedici(medici);
             recvMedici.setAdapter(adapter);
             recvMedici.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL,false));
+            progressDialog.dismiss();
         }catch (JSONException e){
             e.printStackTrace();
         }
