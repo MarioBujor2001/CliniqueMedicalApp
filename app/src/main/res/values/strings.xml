@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LICENTA</string>
+    <string name="app_name">Clinique</string>
     <string name="welcomingText">Welcome to the Clinique!</string>
     <string name="emailHint">Email</string>
     <string name="passwordHint">Password</string>
