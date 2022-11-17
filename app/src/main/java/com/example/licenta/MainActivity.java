@@ -9,6 +9,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,9 +28,10 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
     private TextView tvUserName;
     private FirebaseAuth mAuth;
-    private CardView allMedicsCard;
+    private CardView allMedicsCard, viewProfile;
     private ImageView imgProfile;
     private ProgressDialog progressDialog;
+    private Pacient p;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,15 @@ public class MainActivity extends AppCompatActivity {
         tvUserName = findViewById(R.id.txtForNameDisplay);
         allMedicsCard = findViewById(R.id.allMedicsCard);
         imgProfile = findViewById(R.id.userProfile);
+        viewProfile = findViewById(R.id.viewProfile);
+        viewProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, ProfileViewActivity.class);
+                i.putExtra("PROFILE",p);
+                startActivity(i);
+            }
+        });
         allMedicsCard.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, MedicsListActivity.class));
         });
@@ -73,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void incarcaDate(String id){
 //        APICommunication.getPacient(id,getApplicationContext());
-        Pacient p = new Pacient();
+        p = new Pacient();
         try {
             p.setId(APICommunication.currentOBJ.getString("id"));
             p.setFirstName(APICommunication.currentOBJ.getString("firstName"));

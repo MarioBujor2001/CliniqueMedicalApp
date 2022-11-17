@@ -20,4 +20,29 @@
     <string name="_4_5">⭐4.5</string>
     <string name="our_doctors">Our Doctors</string>
     <string name="loading">Loading...</string>
+    <string name="profile">Profile</string>
+    <string name="personal_info">Personal info:</string>
+    <string name="name">NAME</string>
+    <string name="programeaza_te">Programeaza-te!</string>
+    <string name="filter">Filter:</string>
+    <string name="cauta_medic">Cauta Medic</string>
+    <string-array name="filterMedics">
+        <item>orl</item>
+        <item>alergologie</item>
+        <item>cardiologie</item>
+        <item>chirurgie</item>
+        <item>cosmetica</item>
+        <item>dermatologie</item>
+        <item>endocrinologie</item>
+        <item>gastroenterologie</item>
+        <item>kinetoterapie</item>
+        <item>medicinaFamilie</item>
+        <item>nefrologie</item>
+        <item>neurologie</item>
+        <item>obstreticaGinecologie</item>
+        <item>oftalmologie</item>
+        <item>pediatrie</item>
+        <item>pneumologie</item>
+        <item>urologie</item>
+    </string-array>
 </resources>

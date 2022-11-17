@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="120dp"
     app:cardCornerRadius="10dp"
-    android:elevation="12dp"
+    app:cardElevation="10dp"
     android:layout_marginStart="35dp"
     android:layout_marginEnd="35dp"
     android:layout_marginTop="10dp">
@@ -13,7 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/CardBackgroudn">
+        android:background="@drawable/info_card_background">
 
         <!--        picture-->
         <androidx.cardview.widget.CardView
@@ -21,8 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:elevation="12dp"
             app:cardCornerRadius="10dp"
+            app:cardElevation="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -32,7 +32,7 @@
             <ImageView
                 android:id="@+id/imgMedicProfile"
                 android:layout_width="85dp"
-                android:layout_height="85dp"
+                android:layout_height="100dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/profile_pic_placeholder"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/dr_name"
             android:textColor="#000000"
@@ -74,8 +74,11 @@
             android:fontFamily="@font/poppins_medium"
             android:text="@string/_4_5"
             android:textColor="#000000"
+            app:layout_constraintEnd_toEndOf="@+id/txtMedicSpec"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/txtMedicSpec"
             app:layout_constraintTop_toBottomOf="@+id/txtMedicSpec" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -5,10 +5,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.licenta.Models.Medic;
 import com.example.licenta.Models.Specialitate;
@@ -19,13 +27,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class MedicsListActivity extends AppCompatActivity {
     private RecyclerView recvMedici;
     private ArrayList<Medic> medici;
+    private ArrayList<Medic> filteredMedici;
     private MedicAdapter adapter;
     private ProgressDialog progressDialog;
+    private EditText searchDoctorName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +52,7 @@ public class MedicsListActivity extends AppCompatActivity {
         medici = new ArrayList<>();
         APICommunication.getMedics(getApplicationContext());
         recvMedici = findViewById(R.id.recvMedics);
+        searchDoctorName = findViewById(R.id.searchForDoctorName);
         final Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {
             @Override
@@ -46,11 +60,33 @@ public class MedicsListActivity extends AppCompatActivity {
                 incarcaDate();
             }
         }, 1000);
+
+        searchDoctorName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    filteredMedici = (ArrayList<Medic>) medici.stream()
+                            .filter(medic -> (medic.getFirstName() + medic.getLastName()).contains(s))
+                            .collect(Collectors.toList());
+                    adapter.setMedici(filteredMedici);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
-    private void incarcaDate(){
-        try{
-            for(int i=0;i<APICommunication.mediciArray.length();i++){
+    private void incarcaDate() {
+        try {
+            for (int i = 0; i < APICommunication.mediciArray.length(); i++) {
                 JSONObject currentMedic = APICommunication.mediciArray.getJSONObject(i);
                 Medic m = new Medic();
                 m.setId(currentMedic.getString("id"));
@@ -63,24 +99,24 @@ public class MedicsListActivity extends AppCompatActivity {
                 m.setCNP(currentMedic.getString("cnp"));
                 m.setRating((float) currentMedic.getDouble("rating"));
                 m.setVechime(currentMedic.getInt("vechime"));
-                if(currentMedic.getJSONArray("specialitati").length()>0 && currentMedic.getJSONArray("specialitati").get(0)!=null){
-                    try{
+                if (currentMedic.getJSONArray("specialitati").length() > 0 && currentMedic.getJSONArray("specialitati").get(0) != null) {
+                    try {
                         JSONObject obj = (JSONObject) currentMedic.getJSONArray("specialitati").get(0);
                         obj.getString("tip");
-                        m.getSpecialitati().add(new Specialitate(Specialitati.valueOf(obj.getString("tip")),obj.getString("descriere")));
-                    }catch (JSONException e){
+                        m.getSpecialitati().add(new Specialitate(Specialitati.valueOf(obj.getString("tip")), obj.getString("descriere")));
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
                 medici.add(m);
-                Log.i("medic",m.toString());
+                Log.i("medic", m.toString());
             }
             adapter = new MedicAdapter(this);
             adapter.setMedici(medici);
             recvMedici.setAdapter(adapter);
-            recvMedici.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL,false));
+            recvMedici.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
             progressDialog.dismiss();
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 

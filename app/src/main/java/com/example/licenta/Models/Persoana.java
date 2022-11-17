@@ -1,6 +1,8 @@
 package com.example.licenta.Models;
 
-public abstract class Persoana {
+import java.io.Serializable;
+
+public abstract class Persoana implements Serializable {
 
     private String id;
 

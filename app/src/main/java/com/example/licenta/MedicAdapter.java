@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -51,7 +52,7 @@ public class MedicAdapter extends RecyclerView.Adapter<MedicAdapter.ViewHolder> 
                 .asBitmap()
                 .load(medici.get(position).getPhoto())
                 .into(holder.imgMedicProfile);
-        holder.txtMedicName.setText(medici.get(position).getFirstName() + " " + medici.get(position).getLastName());
+        holder.txtMedicName.setText("Dr. "+medici.get(position).getFirstName() + " " + medici.get(position).getLastName());
         if(medici.get(position).getSpecialitati().size()>0 && medici.get(position).getSpecialitati().get(0)!=null){
             holder.txtMedicSpec.setText(medici.get(position).getSpecialitati().get(0).getTip().toString().toUpperCase());
         }
