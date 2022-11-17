@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Medic extends Persoana{
 
-    private List<Specialitate> specialitati = new ArrayList<>();
+    private Specialitate specialitate;
 
     private Integer vechime;
 
@@ -14,9 +14,9 @@ public class Medic extends Persoana{
     public Medic() {
     }
 
-    public Medic(String id, String firstName, String lastName, String email, String CNP, Integer varsta, String adresa, List<Specialitate> specialitati, Integer vechime, Float rating) {
+    public Medic(String id, String firstName, String lastName, String email, String CNP, Integer varsta, String adresa, Specialitate specialitate, Integer vechime, Float rating) {
         super(id, firstName, lastName, email, CNP, varsta, adresa);
-        this.specialitati = specialitati;
+        this.specialitate = specialitate;
         this.vechime = vechime;
         this.rating = rating;
     }
@@ -27,12 +27,12 @@ public class Medic extends Persoana{
         this.rating = rating;
     }
 
-    public List<Specialitate> getSpecialitati() {
-        return specialitati;
+    public Specialitate getSpecialitate() {
+        return specialitate;
     }
 
-    public void setSpecialitati(List<Specialitate> specialitati) {
-        this.specialitati = specialitati;
+    public void setSpecialitate(Specialitate specialitate) {
+        this.specialitate = specialitate;
     }
 
     public Integer getVechime() {
@@ -54,7 +54,7 @@ public class Medic extends Persoana{
     @Override
     public String toString() {
         return super.toString()+"Medic{" +
-                "specialitati=" + specialitati +
+                "specialitate=" + specialitate +
                 ", vechime=" + vechime +
                 ", rating=" + rating +
                 '}';

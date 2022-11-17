@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.licenta.Models.Medic;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MedicAdapter extends RecyclerView.Adapter<MedicAdapter.ViewHolder> {
 
@@ -54,9 +55,8 @@ public class MedicAdapter extends RecyclerView.Adapter<MedicAdapter.ViewHolder> 
                 .load(medici.get(position).getPhoto())
                 .into(holder.imgMedicProfile);
         holder.txtMedicName.setText("Dr. "+medici.get(position).getFirstName() + " " + medici.get(position).getLastName());
-        if(medici.get(position).getSpecialitati().size()>0 && medici.get(position).getSpecialitati().get(0)!=null){
-            holder.txtMedicSpec.setText(medici.get(position).getSpecialitati().get(0).getTip().toString().toUpperCase());
-        }
+        String spec = medici.get(position).getSpecialitate().getTip().toString();
+        holder.txtMedicSpec.setText(spec.substring(0,1).toUpperCase() + spec.substring(1));
 //        holder.txtMedicSpec.setText(medici.get(position).getSpecialitati().get(0).getTip().toString().toUpperCase());
         holder.txtMedicRating.setText("⭐"+medici.get(position).getRating().toString());
     }

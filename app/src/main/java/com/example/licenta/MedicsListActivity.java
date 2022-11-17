@@ -113,14 +113,12 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
                 m.setCNP(currentMedic.getString("cnp"));
                 m.setRating((float) currentMedic.getDouble("rating"));
                 m.setVechime(currentMedic.getInt("vechime"));
-                if (currentMedic.getJSONArray("specialitati").length() > 0 && currentMedic.getJSONArray("specialitati").get(0) != null) {
-                    try {
-                        JSONObject obj = (JSONObject) currentMedic.getJSONArray("specialitati").get(0);
-                        obj.getString("tip");
-                        m.getSpecialitati().add(new Specialitate(Specialitati.valueOf(obj.getString("tip")), obj.getString("descriere")));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+
+                try{
+                    JSONObject specObj = (JSONObject) currentMedic.get("specialitate");
+                    m.setSpecialitate(new Specialitate(Specialitati.valueOf(specObj.getString("tip")), specObj.getString("descriere")));
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
                 medici.add(m);
                 Log.i("medic", m.toString());
