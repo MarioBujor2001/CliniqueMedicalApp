@@ -1,16 +1,14 @@
 package com.example.licenta;
 
 import android.content.Context;
-import android.media.Image;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -20,14 +18,17 @@ import java.util.ArrayList;
 
 public class MedicAdapter extends RecyclerView.Adapter<MedicAdapter.ViewHolder> {
 
+    private final RecyclerViewInterface recyclerViewInterface;
     private ArrayList<Medic> medici = new ArrayList<>();
     private Context ctx;
 
-    public MedicAdapter(Context ctx) {
+    public MedicAdapter(Context ctx, RecyclerViewInterface r) {
         this.ctx = ctx;
+        this.recyclerViewInterface = r;
     }
 
-    public MedicAdapter() {
+    public MedicAdapter(RecyclerViewInterface recyclerViewInterface) {
+        this.recyclerViewInterface = recyclerViewInterface;
     }
 
     public ArrayList<Medic> getMedici() {
@@ -58,7 +59,6 @@ public class MedicAdapter extends RecyclerView.Adapter<MedicAdapter.ViewHolder> 
         }
 //        holder.txtMedicSpec.setText(medici.get(position).getSpecialitati().get(0).getTip().toString().toUpperCase());
         holder.txtMedicRating.setText("⭐"+medici.get(position).getRating().toString());
-        Log.i("debug", "am ajuns aici");
     }
 
     @Override
@@ -69,6 +69,7 @@ public class MedicAdapter extends RecyclerView.Adapter<MedicAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imgMedicProfile;
         private TextView txtMedicName, txtMedicSpec, txtMedicRating;
+        private CardView parent;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,6 +77,20 @@ public class MedicAdapter extends RecyclerView.Adapter<MedicAdapter.ViewHolder> 
             txtMedicName = itemView.findViewById(R.id.txtMedicName);
             txtMedicSpec = itemView.findViewById(R.id.txtMedicSpec);
             txtMedicRating = itemView.findViewById(R.id.txtMedicRating);
+            parent = itemView.findViewById(R.id.parentCardMedic);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(recyclerViewInterface!=null){
+                        int pos = getAdapterPosition();
+
+                        if(pos!=RecyclerView.NO_POSITION){
+                            recyclerViewInterface.onItemClick(pos);
+                        }
+                    }
+                }
+            });
         }
     }
 }

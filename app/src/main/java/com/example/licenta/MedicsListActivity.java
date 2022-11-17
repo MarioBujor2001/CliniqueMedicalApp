@@ -1,10 +1,14 @@
 package com.example.licenta;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,8 +18,11 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.licenta.Models.Medic;
@@ -29,15 +36,18 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.stream.Collectors;
 
-public class MedicsListActivity extends AppCompatActivity {
+public class MedicsListActivity extends AppCompatActivity implements RecyclerViewInterface {
     private RecyclerView recvMedici;
     private ArrayList<Medic> medici;
     private ArrayList<Medic> filteredMedici;
     private MedicAdapter adapter;
     private ProgressDialog progressDialog;
     private EditText searchDoctorName;
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +85,9 @@ public class MedicsListActivity extends AppCompatActivity {
                             .collect(Collectors.toList());
                     adapter.setMedici(filteredMedici);
                 }
+                if(s.toString().equals("")){
+                    filteredMedici = null;
+                }
             }
 
             @Override
@@ -82,6 +95,7 @@ public class MedicsListActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
     private void incarcaDate() {
@@ -111,7 +125,7 @@ public class MedicsListActivity extends AppCompatActivity {
                 medici.add(m);
                 Log.i("medic", m.toString());
             }
-            adapter = new MedicAdapter(this);
+            adapter = new MedicAdapter(this,this);
             adapter.setMedici(medici);
             recvMedici.setAdapter(adapter);
             recvMedici.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
@@ -120,5 +134,51 @@ public class MedicsListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    public void createMedicPopUp(int position, boolean filtered){
+        dialogBuilder = new AlertDialog.Builder(MedicsListActivity.this);
+        final View addPop = getLayoutInflater().inflate(R.layout.medic_popup,null);
+        Medic m;
+        if(filtered){
+            m = filteredMedici.get(position);
+        }else{
+            m = medici.get(position);
+        }
+        Button btnChoseDate = addPop.findViewById(R.id.btnChosePOP);
+        Button btnVerifDisp = addPop.findViewById(R.id.btnVerifDispPOP);
+        Button btnProgrameaza = addPop.findViewById(R.id.btnProgrameazaPOP);
+        TextView tvNumeMedic = addPop.findViewById(R.id.tvNumeMedicProgramarePOP);
+        TextView tvData = addPop.findViewById(R.id.tvDataPOP);
+        tvNumeMedic.setText("Dr. "+m.getFirstName()+" "+m.getLastName());
+        btnChoseDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int mYear = cal.get(Calendar.YEAR);
+                int mMonth = cal.get(Calendar.MONTH);
+                int mDay = cal.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(MedicsListActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        tvData.setText("Data: "+dayOfMonth + "/" + month + "/" + year);
+                    }
+                }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
+        dialogBuilder.setView(addPop);
+        dialog = dialogBuilder.create();
+        dialog.show();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        if(filteredMedici!=null && filteredMedici.size()!=0){
+            createMedicPopUp(position, true);
+        }else{
+            createMedicPopUp(position, false);
+        }
     }
 }
