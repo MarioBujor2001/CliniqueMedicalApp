@@ -32,6 +32,12 @@
     <string name="data_dd_mm_yyyy">Data: dd/mm/yyyy</string>
     <string name="programeaza">Programeaza!</string>
     <string name="nume_medic_specialitate">Nume medic + Specialitate</string>
+    <string name="appointments">Appointments</string>
+    <string name="your_appointments">Your Appointments</string>
+    <string name="data">DATA</string>
+    <string name="ora">ORA</string>
+    <string name="cancel">Cancel</string>
+    <string name="reschedule">Reschedule</string>
     <string-array name="filterMedics">
         <item>orl</item>
         <item>alergologie</item>

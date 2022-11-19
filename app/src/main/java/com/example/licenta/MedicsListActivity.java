@@ -16,25 +16,21 @@ import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.licenta.Adapters.MedicAdapter;
 import com.example.licenta.Models.Medic;
 import com.example.licenta.Models.Specialitate;
 import com.example.licenta.Models.Specialitati;
 import com.example.licenta.Utils.APICommunication;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.stream.Collectors;

@@ -20,6 +20,7 @@ import org.json.JSONObject;
 public class APICommunication {
     public static JSONObject currentOBJ;
     public static JSONArray mediciArray;
+    public static JSONArray appointmentsArray;
     private final static String APIURL = "http://192.168.100.75:8080/api";
 
     public static void postPacient(Pacient pacient, Context ctx) {
@@ -92,6 +93,27 @@ public class APICommunication {
 //            }
 //        }
 //        return p;
+    }
+
+    public static void getAppointments(String idPac, Context ctx){
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+        JsonArrayRequest jsReq = new JsonArrayRequest(Request.Method.GET,
+                APIURL + "/getProgramare?idPac=" + idPac,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        appointmentsArray = response;
+                        Log.i("RESP_APP:",appointmentsArray.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley:", error.toString());
+                    }
+                });
+        queue.add(jsReq);
     }
 
     public static void getMedics(Context ctx){
