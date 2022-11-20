@@ -1,7 +1,9 @@
 package com.example.licenta.Utils;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -11,16 +13,22 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.licenta.MedicsListActivity;
 import com.example.licenta.Models.Pacient;
+import com.example.licenta.Models.Programare;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class APICommunication {
     public static JSONObject currentOBJ;
     public static JSONArray mediciArray;
     public static JSONArray appointmentsArray;
+    public static boolean invalidAppointment = false;
     private final static String APIURL = "http://192.168.100.75:8080/api";
 
     public static void postPacient(Pacient pacient, Context ctx) {
@@ -56,6 +64,65 @@ public class APICommunication {
         }
     }
 
+    public static void postProgramare(Programare prog, Pacient pac, Context ctx) {
+        JSONObject obj4Send = new JSONObject();
+        try {
+            obj4Send.put("idPac", pac.getId());
+            obj4Send.put("idMedic", prog.getMedic().getId());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                obj4Send.put("data", prog.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            }
+            obj4Send.put("observatii", "n/a");
+            RequestQueue queue = Volley.newRequestQueue(ctx);
+            JsonObjectRequest jsReq = new JsonObjectRequest(Request.Method.POST,
+                    APIURL + "/addProgramare",
+                    obj4Send,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.i("VolleyPostProg:", response.toString());
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.i("VolleyErrPostProg:", error.toString());
+                        }
+                    });
+            queue.add(jsReq);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void pingProgramare(Programare prog, Pacient pac, Context ctx) {
+
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+        JsonObjectRequest jsReq = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            jsReq = new JsonObjectRequest(Request.Method.GET,
+                    APIURL + "/findProgramareByUID?data=" + prog.getData().format(DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm")) + "&idMedic=" + prog.getMedic().getId(),
+                    null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            invalidAppointment = true;
+                            assert response != null;
+                            Log.i("VolleyPing",response.toString());
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            invalidAppointment = false;
+                            Log.e("VolleyPING:", error.toString());
+                        }
+                    });
+        }
+        queue.add(jsReq);
+
+    }
+
     public static void getPacient(String id, Context ctx) {
         Pacient p = null;
         RequestQueue queue = Volley.newRequestQueue(ctx);
@@ -66,7 +133,7 @@ public class APICommunication {
                     @Override
                     public void onResponse(JSONObject response) {
                         currentOBJ = response;
-                        Log.i("RESP",currentOBJ.toString());
+                        Log.i("RESP", currentOBJ.toString());
                     }
                 },
                 new Response.ErrorListener() {
@@ -95,7 +162,7 @@ public class APICommunication {
 //        return p;
     }
 
-    public static void getAppointments(String idPac, Context ctx){
+    public static void getAppointments(String idPac, Context ctx) {
         RequestQueue queue = Volley.newRequestQueue(ctx);
         JsonArrayRequest jsReq = new JsonArrayRequest(Request.Method.GET,
                 APIURL + "/getProgramare?idPac=" + idPac,
@@ -104,7 +171,7 @@ public class APICommunication {
                     @Override
                     public void onResponse(JSONArray response) {
                         appointmentsArray = response;
-                        Log.i("RESP_APP:",appointmentsArray.toString());
+                        Log.i("RESP_APP:", appointmentsArray.toString());
                     }
                 },
                 new Response.ErrorListener() {
@@ -116,7 +183,7 @@ public class APICommunication {
         queue.add(jsReq);
     }
 
-    public static void getMedics(Context ctx){
+    public static void getMedics(Context ctx) {
         RequestQueue queue = Volley.newRequestQueue(ctx);
         JsonArrayRequest jsReq = new JsonArrayRequest(Request.Method.GET,
                 APIURL + "/allMedic",
@@ -125,7 +192,7 @@ public class APICommunication {
                     @Override
                     public void onResponse(JSONArray response) {
                         mediciArray = response;
-                        Log.i("RESP_MEDICI",mediciArray.toString());
+                        Log.i("RESP_MEDICI", mediciArray.toString());
                     }
                 }, new Response.ErrorListener() {
             @Override

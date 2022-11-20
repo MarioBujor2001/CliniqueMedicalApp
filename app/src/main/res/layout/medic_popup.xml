@@ -7,7 +7,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="350dp"
-        android:layout_height="250dp"
+        android:layout_height="275dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/data_dd_mm_yyyy"
                 android:textSize="16sp"
@@ -61,27 +61,54 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvNumeMedicProgramarePOP" />
 
             <Button
-                android:id="@+id/btnChosePOP"
+                android:id="@+id/btnChoseDataPOP"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="7dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/alege"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvDataPOP"
                 app:layout_constraintTop_toBottomOf="@+id/tvNumeMedicProgramarePOP" />
 
+            <TextView
+                android:id="@+id/tvOraPOP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/hh_mm"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDataPOP" />
+
+            <Button
+                android:id="@+id/btnChoseOraPOP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/poppins_medium"
+                android:enabled="false"
+                android:text="@string/alege"
+                app:layout_constraintEnd_toEndOf="@+id/btnChoseDataPOP"
+                app:layout_constraintStart_toStartOf="@+id/btnChoseDataPOP"
+                app:layout_constraintTop_toBottomOf="@+id/btnChoseDataPOP" />
+
             <Button
                 android:id="@+id/btnVerifDispPOP"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="17dp"
                 android:fontFamily="@font/poppins_medium"
+                android:enabled="false"
                 android:text="@string/verifica_disponibilitate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDataPOP" />
+                app:layout_constraintTop_toBottomOf="@+id/tvOraPOP" />
 
             <Button
                 android:id="@+id/btnProgrameazaPOP"
@@ -89,6 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_medium"
+                android:enabled="false"
                 android:text="@string/programeaza"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
