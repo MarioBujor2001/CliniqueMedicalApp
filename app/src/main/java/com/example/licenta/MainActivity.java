@@ -1,5 +1,6 @@
 package com.example.licenta;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -39,11 +40,6 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Main");
         mAuth = FirebaseAuth.getInstance();
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.show();
-        progressDialog.setContentView(R.layout.progress_dialog);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
         tvUserName = findViewById(R.id.txtForNameDisplay);
         allMedicsCard = findViewById(R.id.allMedicsCard);
         allProgramari = findViewById(R.id.allProgramariCard);
@@ -76,12 +72,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         //verificam daca este vreun user logat deja
         FirebaseUser user = mAuth.getCurrentUser();
         if(user == null){
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }else{
-//            Toast.makeText(this, "Welcome "+user.getUid(), Toast.LENGTH_SHORT).show();
             APICommunication.getPacient(user.getUid(),getApplicationContext());
             final Handler handler = new Handler(Looper.getMainLooper());
             handler.postDelayed(new Runnable() {
@@ -94,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void incarcaDate(String id){
-//        APICommunication.getPacient(id,getApplicationContext());
         p = new Pacient();
         try {
             p.setId(APICommunication.currentOBJ.getString("id"));

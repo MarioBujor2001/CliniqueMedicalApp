@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 public class APICommunication {
     public static JSONObject currentOBJ;
@@ -30,6 +31,7 @@ public class APICommunication {
     public static JSONArray appointmentsArray;
     public static boolean invalidAppointment = false;
     private final static String APIURL = "http://192.168.100.75:8080/api";
+//    private final static String APIURL = "http://172.20.10.3:8080/api";
 
     public static void postPacient(Pacient pacient, Context ctx) {
         JSONObject obj4Send = new JSONObject();
@@ -62,6 +64,27 @@ public class APICommunication {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void putPacient(Map<String,Object> modifyAttributes, Context ctx){
+        JSONObject obj4Send = new JSONObject(modifyAttributes);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+        JsonObjectRequest jsReq = new JsonObjectRequest(Request.Method.PUT,
+                APIURL + "/modifyPacient",
+                obj4Send,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i("VolleyPutPacient:",response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("VolleyPutPacientErr:",error.toString());
+                    }
+                });
+        queue.add(jsReq);
     }
 
     public static void postProgramare(Programare prog, Pacient pac, Context ctx) {
@@ -108,7 +131,7 @@ public class APICommunication {
                         public void onResponse(JSONObject response) {
                             invalidAppointment = true;
                             assert response != null;
-                            Log.i("VolleyPing",response.toString());
+                            Log.i("VolleyPing", response.toString());
                         }
                     },
                     new Response.ErrorListener() {

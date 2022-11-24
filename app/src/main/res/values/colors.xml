@@ -10,5 +10,6 @@
     <color name="Registerblue">#2196F3</color>
     <color name="CardBackgroudn">#B184FB</color>
     <color name="themeViolet">#9B60FB</color>
+    <color name="selectedCard">#E522F3</color>
 
 </resources>

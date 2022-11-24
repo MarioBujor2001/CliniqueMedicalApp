@@ -32,6 +32,7 @@ import com.example.licenta.Models.Programare;
 import com.example.licenta.Models.Specialitate;
 import com.example.licenta.Models.Specialitati;
 import com.example.licenta.Utils.APICommunication;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,10 +49,12 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
     private ArrayList<Medic> filteredMedici;
     private MedicAdapter adapter;
     private ProgressDialog progressDialog;
-    private EditText searchDoctorName;
+    private EditText searchDoctor;
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     private Pacient p;
+    private MaterialButtonToggleGroup toggleGroup;
+    private boolean nameSearchCriteria = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +70,8 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
         medici = new ArrayList<>();
         APICommunication.getMedics(getApplicationContext());
         recvMedici = findViewById(R.id.recvMedics);
-        searchDoctorName = findViewById(R.id.searchForDoctorName);
+        searchDoctor = findViewById(R.id.searchForDoctorName);
+        toggleGroup = findViewById(R.id.toggleMedicList);
         final Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {
             @Override
@@ -76,7 +80,27 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
             }
         }, 1000);
 
-        searchDoctorName.addTextChangedListener(new TextWatcher() {
+        toggleGroup.check(R.id.btnToggleName);
+        toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if(isChecked){
+                switch (checkedId){
+                    case R.id.btnToggleName:
+                        nameSearchCriteria = true;
+                        searchDoctor.setHint(R.string.cauta_medic);
+                        break;
+                    case R.id.btnToggleSpec:
+                        nameSearchCriteria = false;
+                        searchDoctor.setHint(R.string.cauta_spec);
+                        break;
+                }
+            }else{
+                if(group.getCheckedButtonId()==View.NO_ID){
+                    toggleGroup.check(R.id.btnToggleName);
+                }
+            }
+        });
+
+        searchDoctor.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -85,10 +109,17 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    filteredMedici = (ArrayList<Medic>) medici.stream()
-                            .filter(medic -> (medic.getFirstName() + medic.getLastName()).contains(s))
-                            .collect(Collectors.toList());
-                    adapter.setMedici(filteredMedici);
+                    if(nameSearchCriteria){
+                        filteredMedici = (ArrayList<Medic>) medici.stream()
+                                .filter(medic -> (medic.getFirstName() + medic.getLastName()).toLowerCase().contains(s.toString().toLowerCase()))
+                                .collect(Collectors.toList());
+                        adapter.setMedici(filteredMedici);
+                    }else{
+                        filteredMedici = (ArrayList<Medic>) medici.stream()
+                                .filter(medic -> (medic.getSpecialitate().toString()).contains(s.toString().toLowerCase()))
+                                .collect(Collectors.toList());
+                        adapter.setMedici(filteredMedici);
+                    }
                 }
                 if (s.toString().equals("")) {
                     filteredMedici = null;
