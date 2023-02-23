@@ -1,7 +1,6 @@
 package com.example.licenta.Adapters;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +15,15 @@ import com.bumptech.glide.Glide;
 import com.example.licenta.Models.Medic;
 import com.example.licenta.Models.Programare;
 import com.example.licenta.R;
-import com.example.licenta.RecyclerViewInterface;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class ProgramareAdapter extends RecyclerView.Adapter<ProgramareAdapter.ViewHolder> {
-
+public class ProgramareMainAdapter extends RecyclerView.Adapter<ProgramareMainAdapter.ViewHolder>{
     private ArrayList<Programare> programari = new ArrayList<>();
     private Context ctx;
 
-    public ProgramareAdapter(Context ctx) {
+    public ProgramareMainAdapter(Context ctx) {
         this.ctx = ctx;
     }
 
@@ -41,13 +38,13 @@ public class ProgramareAdapter extends RecyclerView.Adapter<ProgramareAdapter.Vi
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.appointment_item, parent, false);
-        return new ProgramareAdapter.ViewHolder(view);
+    public ProgramareMainAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.appointment_item_main, parent, false);
+        return new ProgramareMainAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ProgramareMainAdapter.ViewHolder holder, int position) {
         Medic medic = programari.get(position).getMedic();
         Glide.with(ctx)
                 .asBitmap()

@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.example.licenta.Models.Pacient;
 import com.example.licenta.Utils.APICommunication;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -102,6 +103,7 @@ public class ProfileViewActivity extends AppCompatActivity {
                     mapToSend.put("age", Integer.valueOf(edtAge.getText().toString().trim()));
                     mapToSend.put("cnp", edtCNP.getText().toString().trim());
                     mapToSend.put("address", edtAddress.getText().toString().trim());
+                    mapToSend.put("photo", p.getPhoto());
                     APICommunication.putPacient(mapToSend, ProfileViewActivity.this);
                     final Handler handler = new Handler(Looper.getMainLooper());
                     handler.postDelayed(new Runnable() {
@@ -112,7 +114,6 @@ public class ProfileViewActivity extends AppCompatActivity {
                             imgEditProfile.setBackgroundColor(getResources().getColor(R.color.CardBackgroudn));
                             cardViewProfile.setVisibility(View.VISIBLE);
                             cardViewEditProfile.setVisibility(View.GONE);
-
                             actualizeazaPacientCurent(mapToSend);
                             incarcaDate();
 
@@ -139,6 +140,7 @@ public class ProfileViewActivity extends AppCompatActivity {
         p.setVarsta((Integer) map.get("age"));
         p.setCNP((String) map.get("cnp"));
         p.setAdresa((String) map.get("address"));
+        p.setPhoto((String) map.get("photo"));
     }
 
     private void incarcaDate() {
@@ -198,22 +200,28 @@ public class ProfileViewActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
+                assert data != null;
                 Uri selectedImage = data.getData();
+                APICommunication.uploadPictureFirebase(selectedImage, getApplicationContext(), p);
+                imgProfile.setImageURI(selectedImage);
 
-                filePath = getPath(selectedImage);
-                String file_extn = filePath.substring(filePath.lastIndexOf(".") + 1);
-                if (file_extn.equals("img") || file_extn.equals("jpg") || file_extn.equals("jpeg") || file_extn.equals("gif") || file_extn.equals("png")) {
-                    Toast.makeText(this, filePath, Toast.LENGTH_SHORT).show();
-                    Bitmap photo = null;
-                    try {
-                        photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedImage);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    imgProfile.setImageBitmap(photo);
-                } else {
-                    //NOT IN REQUIRED FORMAT
-                }
+//                filePath = getPath(selectedImage);
+////                File file = new File(selectedImage.getPath());
+////                APICommunication.postPicture(file, getApplicationContext());
+//                String file_extn = filePath.substring(filePath.lastIndexOf(".") + 1);
+//                if (file_extn.equals("img") || file_extn.equals("jpg") || file_extn.equals("jpeg") || file_extn.equals("gif") || file_extn.equals("png")) {
+//                    Toast.makeText(this, filePath, Toast.LENGTH_SHORT).show();
+//                    Bitmap photo = null;
+//                    try {
+//                        photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedImage);
+//                        APICommunication.postPicture(photo,getApplicationContext());
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    imgProfile.setImageBitmap(photo);
+//                } else {
+//                    //NOT IN REQUIRED FORMAT
+//                }
             }
         }
     }

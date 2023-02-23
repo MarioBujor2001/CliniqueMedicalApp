@@ -1,10 +1,16 @@
 package com.example.licenta.Utils;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -16,22 +22,125 @@ import com.android.volley.toolbox.Volley;
 import com.example.licenta.MedicsListActivity;
 import com.example.licenta.Models.Pacient;
 import com.example.licenta.Models.Programare;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class APICommunication {
     public static JSONObject currentOBJ;
     public static JSONArray mediciArray;
     public static JSONArray appointmentsArray;
+    public static String encodedImage;
     public static boolean invalidAppointment = false;
     private final static String APIURL = "http://192.168.100.75:8080/api";
-//    private final static String APIURL = "http://172.20.10.3:8080/api";
+    //    private final static String APIURL = "http://172.20.10.3:8080/api";
+    private static StorageReference storageReference;
+
+    public static void encodeFileBase64(File file) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            try {
+                encodedImage = Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(file));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void uploadPictureFirebase(Uri image, Context ctx, Pacient pacient) {
+
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd_MM_yyyy_HH_mm_ss", Locale.getDefault());
+        Date now = new Date();
+        String fileName = pacient.getId() + "_" + dateFormatter.format(now);
+        storageReference = FirebaseStorage.getInstance().getReference("images/" + fileName);
+
+        String returnLink = "";
+
+        storageReference.putFile(image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(ctx, "Succesfully uploaded!", Toast.LENGTH_LONG).show();
+
+                storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                    pacient.setPhoto(uri.toString());
+                    Log.i("url out", uri.toString());
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ctx, "Error occured!", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public static void postPicture(Bitmap file, Context ctx) throws IOException {
+        File f = new File(ctx.getCacheDir(), "temp");
+        f.createNewFile();
+
+//Convert bitmap to byte array
+        Bitmap bitmap = file;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80 /*ignored for PNG*/, bos);
+        byte[] bitmapdata = bos.toByteArray();
+
+//write the bytes in file
+        FileOutputStream fos = new FileOutputStream(f);
+        fos.write(bitmapdata);
+        fos.flush();
+        fos.close();
+        encodeFileBase64(f);
+
+        Map<String, String> mappedValues = new HashMap<>();
+        mappedValues.put("encoded", encodedImage);
+        Log.i("image", encodedImage);
+        JSONObject obj4Send = new JSONObject(mappedValues);
+        Log.i("jsonObj", obj4Send.toString());
+//        try {
+//            obj4Send.put("encoded1", encodedImage.substring(0,encodedImage.length()/3));
+//            obj4Send.put("encoded2",encodedImage.substring(encodedImage.length()/3,2*encodedImage.length()/3));
+//            obj4Send.put("encoded3",encodedImage.substring(2*encodedImage.length()/3));
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+        JsonObjectRequest jsReq = new JsonObjectRequest(Request.Method.GET,
+                APIURL + "/decodeFile",
+                obj4Send,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+//                            Log.i("Volley:", response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+//                            Log.e("Volley:", error.getMessage());
+                    }
+                });
+        queue.add(jsReq);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+
+    }
 
     public static void postPacient(Pacient pacient, Context ctx) {
         JSONObject obj4Send = new JSONObject();
@@ -66,7 +175,7 @@ public class APICommunication {
         }
     }
 
-    public static void putPacient(Map<String,Object> modifyAttributes, Context ctx){
+    public static void putPacient(Map<String, Object> modifyAttributes, Context ctx) {
         JSONObject obj4Send = new JSONObject(modifyAttributes);
         RequestQueue queue = Volley.newRequestQueue(ctx);
         JsonObjectRequest jsReq = new JsonObjectRequest(Request.Method.PUT,
@@ -75,13 +184,13 @@ public class APICommunication {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.i("VolleyPutPacient:",response.toString());
+                        Log.i("VolleyPutPacient:", response.toString());
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("VolleyPutPacientErr:",error.toString());
+                        Log.e("VolleyPutPacientErr:", error.toString());
                     }
                 });
         queue.add(jsReq);
