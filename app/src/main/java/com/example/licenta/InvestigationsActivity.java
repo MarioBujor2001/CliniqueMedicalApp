@@ -58,6 +58,7 @@ public class InvestigationsActivity extends AppCompatActivity {
             boolean isSucces = intent.getBooleanExtra("success",false);
             if(isSucces){
                 loadInvestigations();
+                reloadInvestigationAdapter();
                 cancelLoadingDialog();
             }
         }
@@ -79,14 +80,13 @@ public class InvestigationsActivity extends AppCompatActivity {
                 }
                 investigations.add(investigation);
             }
-            reloadInvestigationAdapter();
         }catch (JSONException e){
             e.printStackTrace();
         }
     }
 
     private void reloadInvestigationAdapter(){
-        adapter = new InvestigationAdapter(getApplication());
+        adapter = new InvestigationAdapter(getApplicationContext());
         adapter.setInvestigations(investigations);
         recvInvestigations.setAdapter(adapter);
         recvInvestigations.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
@@ -138,6 +138,7 @@ public class InvestigationsActivity extends AppCompatActivity {
         }else {
             //doar reincarcam datele
             loadInvestigations();
+            reloadInvestigationAdapter();
             cancelLoadingDialog();
         }
         //broadcast receiver va incarca datele;

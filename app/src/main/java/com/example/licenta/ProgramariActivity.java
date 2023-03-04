@@ -1,16 +1,23 @@
 package com.example.licenta;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.example.licenta.Adapters.MedicAdapter;
 import com.example.licenta.Adapters.ProgramareAdapter;
 import com.example.licenta.Models.Medic;
 import com.example.licenta.Models.Pacient;
@@ -33,32 +40,56 @@ public class ProgramariActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private Pacient p;
 
+    public BroadcastReceiver receivedAppointmentsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i("medicReceive","success");
+            boolean isSucces = intent.getBooleanExtra("success", false);
+            if(isSucces){
+                loadAppointments();
+                reloadAppointmentsAdapter();
+                cancelLoadingDialog();
+            }
+        }
+    };
+
+    private void createLoadingDialog(){
+        progressDialog = new ProgressDialog(this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+    }
+
+    private void cancelLoadingDialog(){
+        progressDialog.dismiss();
+    }
+
+    private void reloadAppointmentsAdapter(){
+        adapter = new ProgramareAdapter(this);
+        adapter.setProgramari(programari);
+        recvAppointments.setAdapter(adapter);
+        recvAppointments.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver(receivedAppointmentsReceiver, new IntentFilter("apiMessageAppointments"));
+        createLoadingDialog();
+        p = (Pacient) getIntent().getSerializableExtra("pacient");
+        APICommunication.getAppointments(p.getId(), getApplicationContext());
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_programari);
         recvAppointments = findViewById(R.id.recvAppointments);
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.show();
-        progressDialog.setContentView(R.layout.progress_dialog);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-        p = (Pacient) getIntent().getSerializableExtra("pacient");
-
-        programari = new ArrayList<>();
-        APICommunication.getAppointments(p.getId(), getApplicationContext());
-        final Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                incarcaDate();
-            }
-        }, 1000);
     }
 
-    private void incarcaDate() {
+    private void loadAppointments() {
         try{
+            programari = new ArrayList<>();
             for(int i=0;i<APICommunication.appointmentsArray.length();i++){
 //                setarea info programare
                 JSONObject currentApp = APICommunication.appointmentsArray.getJSONObject(i);
@@ -92,11 +123,6 @@ public class ProgramariActivity extends AppCompatActivity {
                 prog.setMedic(m);
                 programari.add(prog);
             }
-            adapter = new ProgramareAdapter(this);
-            adapter.setProgramari(programari);
-            recvAppointments.setAdapter(adapter);
-            recvAppointments.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-            progressDialog.dismiss();
         }catch (JSONException e){
             e.printStackTrace();
         }

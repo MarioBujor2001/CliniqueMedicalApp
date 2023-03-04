@@ -221,7 +221,9 @@ public class APICommunication {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+                            //va intra aici deoarece nu primi nimic inapoi
                             Log.i("VolleyErrPostProg:", error.toString());
+                            sendIntent("apiMessageSuccessReservation", true, ctx);
                         }
                     });
             queue.add(jsReq);
@@ -242,6 +244,7 @@ public class APICommunication {
                         @Override
                         public void onResponse(JSONObject response) {
                             invalidAppointment = true;
+                            sendIntent("apiMessageReservation", true, ctx);
                             assert response != null;
                             Log.i("VolleyPing", response.toString());
                         }
@@ -250,6 +253,7 @@ public class APICommunication {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             invalidAppointment = false;
+                            sendIntent("apiMessageReservation", true, ctx);
                             Log.e("VolleyPING:", error.toString());
                         }
                     });
@@ -268,7 +272,7 @@ public class APICommunication {
                     @Override
                     public void onResponse(JSONObject response) {
                         currentOBJ = response;
-                        Log.i("RESP", currentOBJ.toString());
+                        sendIntent("apiMessagePersonalInfo", true, ctx);
                     }
                 },
                 new Response.ErrorListener() {
@@ -306,7 +310,7 @@ public class APICommunication {
                     @Override
                     public void onResponse(JSONArray response) {
                         appointmentsArray = response;
-                        Log.i("RESP_APP:", appointmentsArray.toString());
+                        sendIntent("apiMessageAppointments", true, ctx);
                     }
                 },
                 new Response.ErrorListener() {
@@ -327,7 +331,7 @@ public class APICommunication {
                     @Override
                     public void onResponse(JSONArray response) {
                         mediciArray = response;
-                        Log.i("RESP_MEDICI", mediciArray.toString());
+                        sendIntent("apiMessageMedics", true, ctx);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -347,9 +351,7 @@ public class APICommunication {
                     @Override
                     public void onResponse(JSONArray response) {
                         investigationsArray = response;
-                        Intent intent = new Intent("apiMessageInvestigation");
-                        intent.putExtra("success", true);
-                        LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
+                        sendIntent("apiMessageInvestigation", true, ctx);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -358,5 +360,11 @@ public class APICommunication {
             }
         });
         queue.add(jsReq);
+    }
+
+    public static void sendIntent(String action, boolean isSuccessful, Context context){
+        Intent intent = new Intent(action);
+        intent.putExtra("success", isSuccessful);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 }

@@ -3,11 +3,15 @@ package com.example.licenta;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.licenta.Adapters.MedicAdapter;
 import com.example.licenta.Adapters.ProgramareAdapter;
 import com.example.licenta.Adapters.ProgramareMainAdapter;
 import com.example.licenta.Models.Medic;
@@ -50,6 +55,65 @@ public class MainActivity extends AppCompatActivity {
     private Pacient p;
     private ArrayList<Programare> programari;
     private ProgramareMainAdapter adapter;
+    private FirebaseUser user;
+
+    public BroadcastReceiver receivePersonalInfoReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isSucces = intent.getBooleanExtra("success", false);
+            if(isSucces){
+                loadPersonalInfo(user.getUid());
+                APICommunication.getAppointments(user.getUid(), getApplicationContext());
+            }
+        }
+    };
+
+    public BroadcastReceiver receiveAppointmentsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isSucces = intent.getBooleanExtra("success", false);
+            if(isSucces){
+                loadAppointments();
+                reloadAppointmentsAdapter();
+                cancelLoadingDialog();
+            }
+        }
+    };
+
+    private void createLoadingDialog(){
+        progressDialog = new ProgressDialog(this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+    }
+
+    private void cancelLoadingDialog(){
+        progressDialog.dismiss();
+    }
+
+    private void reloadAppointmentsAdapter(){
+        adapter = new ProgramareMainAdapter(this);
+        adapter.setProgramari(programari);
+        recvAppointments.setAdapter(adapter);
+        recvAppointments.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver(receivePersonalInfoReceiver, new IntentFilter("apiMessagePersonalInfo"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiveAppointmentsReceiver, new IntentFilter("apiMessageAppointments"));
+        createLoadingDialog();
+        //verificam daca este vreun user logat deja
+        user = mAuth.getCurrentUser();
+        if(user == null){
+            cancelLoadingDialog();
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        }else{
+            APICommunication.getPacient(user.getUid(),getApplicationContext());
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,17 +153,9 @@ public class MainActivity extends AppCompatActivity {
         investigationCard.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, InvestigationsActivity.class));
         });
-        programari = new ArrayList<>();
-//        final Handler handler = new Handler(Looper.getMainLooper());
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                incarcaProgramari();
-//            }
-//        }, 1000);
     }
 
-    private void incarcaProgramari() {
+    private void loadAppointments() {
         try{
             programari = new ArrayList<>();
             for(int i=0;i<APICommunication.appointmentsArray.length();i++){
@@ -139,42 +195,12 @@ public class MainActivity extends AppCompatActivity {
                         programari.add(prog);
                 }
             }
-            adapter = new ProgramareMainAdapter(this);
-            adapter.setProgramari(programari);
-            recvAppointments.setAdapter(adapter);
-            recvAppointments.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-            progressDialog.dismiss();
         }catch (JSONException e){
             e.printStackTrace();
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        progressDialog = new ProgressDialog(this);
-        progressDialog.show();
-        progressDialog.setContentView(R.layout.progress_dialog);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        //verificam daca este vreun user logat deja
-        FirebaseUser user = mAuth.getCurrentUser();
-        if(user == null){
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        }else{
-            APICommunication.getPacient(user.getUid(),getApplicationContext());
-            APICommunication.getAppointments(user.getUid(), getApplicationContext());
-            final Handler handler = new Handler(Looper.getMainLooper());
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    incarcaDate(user.getUid());
-                    incarcaProgramari();
-                }
-            }, 1000);
-        }
-    }
-
-    private void incarcaDate(String id){
+    private void loadPersonalInfo(String id){
         p = new Pacient();
         try {
             p.setId(APICommunication.currentOBJ.getString("id"));

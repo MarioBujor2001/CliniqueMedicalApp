@@ -2,12 +2,17 @@ package com.example.licenta;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -25,6 +30,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.licenta.Adapters.InvestigationAdapter;
 import com.example.licenta.Adapters.MedicAdapter;
 import com.example.licenta.Models.Medic;
 import com.example.licenta.Models.Pacient;
@@ -55,31 +61,90 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
     private Pacient p;
     private MaterialButtonToggleGroup toggleGroup;
     private boolean nameSearchCriteria = true;
+    private Button btnProgrameaza;
+
+    public BroadcastReceiver receivedMedicsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isSucces = intent.getBooleanExtra("success", false);
+            if(isSucces){
+                loadMedics();
+                reloadMedicsAdapter();
+                cancelLoadingDialog();
+            }
+        }
+    };
+
+    public BroadcastReceiver receiveAvailableReservation = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isSucces = intent.getBooleanExtra("success", false);
+            if(isSucces){
+                if (!APICommunication.invalidAppointment) {
+                    btnProgrameaza.setEnabled(true);
+                    Toast.makeText(MedicsListActivity.this, "This date is available", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(MedicsListActivity.this, "Date and time already taken", Toast.LENGTH_SHORT).show();
+                }
+                cancelLoadingDialog();
+            }
+        }
+    };
+
+    public BroadcastReceiver receiveSuccessReservation = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isSucces = intent.getBooleanExtra("success", false);
+            if(isSucces){
+                cancelLoadingDialog();
+                Toast.makeText(MedicsListActivity.this, "Appointment made successfully!", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        }
+    };
+
+    private void createLoadingDialog(){
+        progressDialog = new ProgressDialog(this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+    }
+
+    private void cancelLoadingDialog(){
+        progressDialog.dismiss();
+    }
+
+    private void reloadMedicsAdapter(){
+        adapter = new MedicAdapter(this, this);
+        adapter.setMedici(medici);
+        recvMedici.setAdapter(adapter);
+        recvMedici.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver(receivedMedicsReceiver, new IntentFilter("apiMessageMedics"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiveAvailableReservation, new IntentFilter("apiMessageReservation"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiveSuccessReservation, new IntentFilter("apiMessageSuccessReservation"));
+        createLoadingDialog();
+        if(APICommunication.mediciArray==null){
+            APICommunication.getMedics(getApplicationContext());
+        }else{
+            loadMedics();
+            reloadMedicsAdapter();
+            cancelLoadingDialog();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medics_list);
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.show();
-        progressDialog.setContentView(R.layout.progress_dialog);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         p = (Pacient) getIntent().getSerializableExtra("pacient");
-
-        medici = new ArrayList<>();
-        APICommunication.getMedics(getApplicationContext());
         recvMedici = findViewById(R.id.recvMedics);
         searchDoctor = findViewById(R.id.searchForDoctorName);
         toggleGroup = findViewById(R.id.toggleMedicList);
-        final Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                incarcaDate();
-            }
-        }, 1000);
-
         toggleGroup.check(R.id.btnToggleName);
         toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if(isChecked){
@@ -134,8 +199,9 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
 
     }
 
-    private void incarcaDate() {
+    private void loadMedics() {
         try {
+            medici = new ArrayList<>();
             for (int i = 0; i < APICommunication.mediciArray.length(); i++) {
                 JSONObject currentMedic = APICommunication.mediciArray.getJSONObject(i);
                 Medic m = new Medic();
@@ -159,11 +225,7 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
                 medici.add(m);
                 Log.i("medic", m.toString());
             }
-            adapter = new MedicAdapter(this, this);
-            adapter.setMedici(medici);
-            recvMedici.setAdapter(adapter);
-            recvMedici.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-            progressDialog.dismiss();
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -183,7 +245,7 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
         Button btnChoseDate = addPop.findViewById(R.id.btnChoseDataPOP);
         Button btnChoseTime = addPop.findViewById(R.id.btnChoseOraPOP);
         Button btnVerifDisp = addPop.findViewById(R.id.btnVerifDispPOP);
-        Button btnProgrameaza = addPop.findViewById(R.id.btnProgrameazaPOP);
+        btnProgrameaza = addPop.findViewById(R.id.btnProgrameazaPOP);
         TextView tvNumeMedic = addPop.findViewById(R.id.tvNumeMedicProgramarePOP);
         TextView tvData = addPop.findViewById(R.id.tvDataPOP);
         TextView tvOra = addPop.findViewById(R.id.tvOraPOP);
@@ -253,23 +315,7 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
             public void onClick(View v) {
                 APICommunication.pingProgramare(initProgramare(position, filtered, tvData.getText().toString(), tvOra.getText().toString()),
                         p, getApplicationContext());
-                progressDialog = new ProgressDialog(MedicsListActivity.this);
-                progressDialog.show();
-                progressDialog.setContentView(R.layout.progress_dialog);
-                progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                final Handler handler = new Handler(Looper.getMainLooper());
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!APICommunication.invalidAppointment) {
-                            btnProgrameaza.setEnabled(true);
-                            Toast.makeText(MedicsListActivity.this, "This date is available", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(MedicsListActivity.this, "Date and time already taken", Toast.LENGTH_SHORT).show();
-                        }
-                        progressDialog.dismiss();
-                    }
-                }, 1000);
+                createLoadingDialog();
             }
         });
         btnProgrameaza.setOnClickListener(new View.OnClickListener() {
@@ -277,19 +323,16 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
             public void onClick(View v) {
                 APICommunication.postProgramare(initProgramare(position, filtered, tvData.getText().toString(), tvOra.getText().toString()),
                         p, getApplicationContext());
-                progressDialog = new ProgressDialog(MedicsListActivity.this);
-                progressDialog.show();
-                progressDialog.setContentView(R.layout.progress_dialog);
-                progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                final Handler handler = new Handler(Looper.getMainLooper());
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressDialog.dismiss();
-                        Toast.makeText(MedicsListActivity.this, "Appointment made successfully!", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                    }
-                }, 1000);
+                createLoadingDialog();
+//                final Handler handler = new Handler(Looper.getMainLooper());
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        progressDialog.dismiss();
+//                        Toast.makeText(MedicsListActivity.this, "Appointment made successfully!", Toast.LENGTH_SHORT).show();
+//                        dialog.dismiss();
+//                    }
+//                }, 1000);
             }
         });
         dialogBuilder.setView(addPop);
