@@ -2,6 +2,7 @@ package com.example.licenta.Utils;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -50,6 +52,7 @@ public class APICommunication {
     public static JSONObject currentOBJ;
     public static JSONArray mediciArray;
     public static JSONArray appointmentsArray;
+    public static JSONArray investigationsArray;
     public static String encodedImage;
     public static boolean invalidAppointment = false;
     private final static String APIURL = "http://192.168.100.75:8080/api";
@@ -330,6 +333,28 @@ public class APICommunication {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley:", error.toString());
+            }
+        });
+        queue.add(jsReq);
+    }
+
+    public static void getInvestigations(Context ctx){
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+        JsonArrayRequest jsReq = new JsonArrayRequest(Request.Method.GET,
+                APIURL + "/getInvestigatii",
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        investigationsArray = response;
+                        Intent intent = new Intent("apiMessageInvestigation");
+                        intent.putExtra("success", true);
+                        LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
             }
         });
         queue.add(jsReq);

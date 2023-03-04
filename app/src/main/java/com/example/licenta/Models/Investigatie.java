@@ -1,14 +1,19 @@
 package com.example.licenta.Models;
 
-public class Investigation {
+public class Investigatie {
     private String name;
     private float price;
     private Specialitate specialty;
+    private String description;
 
-    public Investigation(String name, float price, Specialitate specialty) {
+    public Investigatie(String name, float price, Specialitate specialty, String description) {
         this.name = name;
         this.price = price;
         this.specialty = specialty;
+        this.description = description;
+    }
+
+    public Investigatie() {
     }
 
     public String getName() {
