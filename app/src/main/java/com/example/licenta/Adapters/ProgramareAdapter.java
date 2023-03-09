@@ -1,15 +1,18 @@
 package com.example.licenta.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -63,6 +66,14 @@ public class ProgramareAdapter extends RecyclerView.Adapter<ProgramareAdapter.Vi
             holder.txtData.setText(dateFormated.substring(0,10));
             holder.txtOra.setText(dateFormated.substring(11));
         }
+        holder.btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent("progAdapterDelete");
+                intent.putExtra("toDelete", programari.get(position));
+                LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
+            }
+        });
     }
 
     @Override
@@ -74,6 +85,7 @@ public class ProgramareAdapter extends RecyclerView.Adapter<ProgramareAdapter.Vi
         private ImageView imgMedicProfile;
         private TextView txtMedicName, txtMedicSpec, txtMedicRating, txtData, txtOra;
         private CardView parent;
+        private Button btnCancel, btnReschedule;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +95,8 @@ public class ProgramareAdapter extends RecyclerView.Adapter<ProgramareAdapter.Vi
             txtMedicRating = itemView.findViewById(R.id.txtMedicRating);
             txtData = itemView.findViewById(R.id.tvAppDate);
             txtOra = itemView.findViewById(R.id.tvAppTime);
+            btnCancel = itemView.findViewById(R.id.btnAppCancel);
+            btnReschedule = itemView.findViewById(R.id.btnAppReschedule);
             parent = itemView.findViewById(R.id.parentCardMedic);
         }
     }

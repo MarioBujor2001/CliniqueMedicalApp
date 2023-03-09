@@ -53,8 +53,18 @@ public class ProgramariActivity extends AppCompatActivity {
         }
     };
 
+    public BroadcastReceiver receiverAppointmentsDelete = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Programare appointment = (Programare) intent.getSerializableExtra("toDelete");
+            if(appointment != null){
+                APICommunication.deleteProgramare(appointment, p.getId(),getApplicationContext());
+            }
+        }
+    };
+
     private void createLoadingDialog(){
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(ProgramariActivity.this);
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -75,6 +85,7 @@ public class ProgramariActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         LocalBroadcastManager.getInstance(this).registerReceiver(receivedAppointmentsReceiver, new IntentFilter("apiMessageAppointments"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiverAppointmentsDelete, new IntentFilter("progAdapterDelete"));
         createLoadingDialog();
         p = (Pacient) getIntent().getSerializableExtra("pacient");
         APICommunication.getAppointments(p.getId(), getApplicationContext());

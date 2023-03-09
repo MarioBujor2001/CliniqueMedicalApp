@@ -232,6 +232,28 @@ public class APICommunication {
         }
     }
 
+    public static void deleteProgramare(Programare prog, String pacId ,Context ctx){
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+        JsonObjectRequest jsReq = new JsonObjectRequest(Request.Method.DELETE,
+                APIURL + "/deleteProg?idProg=" + prog.getId(),
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if(pacId != null){
+                            APICommunication.getAppointments(pacId, ctx);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley:", error.toString());
+                    }
+                });
+        queue.add(jsReq);
+    }
+
     public static void pingProgramare(Programare prog, Pacient pac, Context ctx) {
 
         RequestQueue queue = Volley.newRequestQueue(ctx);

@@ -1,8 +1,9 @@
 package com.example.licenta.Models;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Programare {
+public class Programare implements Serializable {
     private Integer id;
     private LocalDateTime data;
     private String observatii;
