@@ -324,15 +324,6 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
                 APICommunication.postProgramare(initProgramare(position, filtered, tvData.getText().toString(), tvOra.getText().toString()),
                         p, getApplicationContext());
                 createLoadingDialog();
-//                final Handler handler = new Handler(Looper.getMainLooper());
-//                handler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        progressDialog.dismiss();
-//                        Toast.makeText(MedicsListActivity.this, "Appointment made successfully!", Toast.LENGTH_SHORT).show();
-//                        dialog.dismiss();
-//                    }
-//                }, 1000);
             }
         });
         dialogBuilder.setView(addPop);

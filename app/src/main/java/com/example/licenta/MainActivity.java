@@ -216,13 +216,19 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         tvUserName.setText(p.getFirstName()+" "+p.getLastName());
-        Glide.with(this).asBitmap().load(p.getPhoto()).into(imgProfile);
+        Glide.with(getApplicationContext()).asBitmap().load(p.getPhoto()).into(imgProfile);
     }
 
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//    }
+
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onBackPressed() {
+        super.onBackPressed();
         mAuth.signOut();
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        finish();
     }
 }
