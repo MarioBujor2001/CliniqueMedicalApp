@@ -189,6 +189,7 @@ public class APICommunication {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.i("VolleyPutPacient:", response.toString());
+                        sendIntent("receivedNewProfileInfo", true, ctx);
                     }
                 },
                 new Response.ErrorListener() {

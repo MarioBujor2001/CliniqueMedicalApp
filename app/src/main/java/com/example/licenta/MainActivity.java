@@ -46,7 +46,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView tvUserName;
+    private TextView tvUserName, txtYouDontHaveAppointments;
     private FirebaseAuth mAuth;
     private CardView allMedicsCard, viewProfile, allProgramari, aboutCard, investigationCard;
     private RecyclerView recvAppointments;
@@ -92,6 +92,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void reloadAppointmentsAdapter(){
+        if(programari.isEmpty()){
+            txtYouDontHaveAppointments.setVisibility(View.VISIBLE);
+        }else{
+            txtYouDontHaveAppointments.setVisibility(View.GONE);
+        }
         adapter = new ProgramareMainAdapter(this);
         adapter.setProgramari(programari);
         recvAppointments.setAdapter(adapter);
@@ -122,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         tvUserName = findViewById(R.id.txtForNameDisplay);
+        txtYouDontHaveAppointments = findViewById(R.id.txtYouDontHaveAppointments);
         allMedicsCard = findViewById(R.id.allMedicsCard);
         allProgramari = findViewById(R.id.allProgramariCard);
         aboutCard = findViewById(R.id.aboutCliniqueCard);

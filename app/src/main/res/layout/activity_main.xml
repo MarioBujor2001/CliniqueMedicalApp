@@ -14,32 +14,33 @@
         android:layout_marginTop="10dp"
         app:cardCornerRadius="100dp"
         app:cardElevation="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <ImageView
             android:id="@+id/imgProfileSettings"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:background="@color/themeViolet"
-            android:src="@drawable/ic_person"/>
+            android:src="@drawable/ic_person" />
     </androidx.cardview.widget.CardView>
 
-<!--    welcome card-->
+    <!--    welcome card-->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView3"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="0dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="45dp"
         android:layout_marginEnd="10dp"
-        app:cardElevation="10dp"
         app:cardCornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline4"
         app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -106,26 +107,28 @@
 
     </androidx.cardview.widget.CardView>
 
-<!--    functions card-->
+    <!--    functions card-->
     <androidx.cardview.widget.CardView
+        android:id="@+id/functionsCard"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="0dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
-        app:cardElevation="10dp"
         app:cardCornerRadius="10dp"
-        android:id="@+id/functionsCard"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView3">
+        app:layout_constraintTop_toTopOf="@+id/guideline5">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/info_card_background">
 
-<!--            medic function-->
+            <!--            medic function-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/allMedicsCard"
                 android:layout_width="85dp"
@@ -170,7 +173,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-<!--            programari card-->
+            <!--            programari card-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/allProgramariCard"
                 android:layout_width="85dp"
@@ -215,7 +218,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-<!--            about cliniq card-->
+            <!--            about cliniq card-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/aboutCliniqueCard"
                 android:layout_width="85dp"
@@ -260,7 +263,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-<!--            investigati card-->
+            <!--            investigati card-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/investigationCard"
                 android:layout_width="85dp"
@@ -314,7 +317,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         app:cardCornerRadius="10dp"
@@ -322,7 +324,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/functionsCard">
+        app:layout_constraintTop_toTopOf="@+id/guideline6">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -335,8 +337,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="3dp"
-                android:text="@string/this_week_s_appointments"
                 android:fontFamily="@font/poppins_bold"
+                android:text="@string/this_week_s_appointments"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -355,7 +357,40 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvThisWeeksAppointments" />
+
+            <TextView
+                android:id="@+id/txtYouDontHaveAppointments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/luckily_you_don_t_have_any_appointments"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.06" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.21" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.43" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

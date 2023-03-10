@@ -44,6 +44,7 @@ public class ProfileViewActivity extends AppCompatActivity {
     private boolean btnEditToggleState;
     private ProgressDialog progressDialog;
     private String filePath;
+    private Map<String, Object> mapToSend;
 
     public BroadcastReceiver finishedUploadingPicture = new BroadcastReceiver() {
         @Override
@@ -57,11 +58,40 @@ public class ProfileViewActivity extends AppCompatActivity {
         }
     };
 
+    public BroadcastReceiver receivedNewProfileInfo = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isSucces = intent.getBooleanExtra("success", false);
+            if(isSucces){
+                Toast.makeText(ProfileViewActivity.this, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
+                imgEditProfile.setBackgroundColor(getResources().getColor(R.color.CardBackgroudn));
+                cardViewProfile.setVisibility(View.VISIBLE);
+                cardViewEditProfile.setVisibility(View.GONE);
+                actualizeazaPacientCurent(mapToSend);
+                incarcaDate();
+                cancelLoadingDialog();
+            }
+        }
+    };
+
+    private void createLoadingDialog(){
+        progressDialog = new ProgressDialog(this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+    }
+
+    private void cancelLoadingDialog(){
+        progressDialog.dismiss();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
         LocalBroadcastManager.getInstance(this).registerReceiver(finishedUploadingPicture,
                 new IntentFilter("finishedUploadingPicture"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receivedNewProfileInfo,
+                new IntentFilter("receivedNewProfileInfo"));
     }
 
     @Override
@@ -119,7 +149,7 @@ public class ProfileViewActivity extends AppCompatActivity {
                     progressDialog.show();
                     progressDialog.setContentView(R.layout.progress_dialog);
                     progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                    Map<String, Object> mapToSend = new HashMap<>();
+                    mapToSend = new HashMap<>();
                     mapToSend.put("id", p.getId());
                     mapToSend.put("firstName", edtFName.getText().toString().trim());
                     mapToSend.put("lastName", edtLName.getText().toString().trim());
@@ -128,20 +158,20 @@ public class ProfileViewActivity extends AppCompatActivity {
                     mapToSend.put("address", edtAddress.getText().toString().trim());
                     mapToSend.put("photo", p.getPhoto());
                     APICommunication.putPacient(mapToSend, ProfileViewActivity.this);
-                    final Handler handler = new Handler(Looper.getMainLooper());
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressDialog.dismiss();
-                            Toast.makeText(ProfileViewActivity.this, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
-                            imgEditProfile.setBackgroundColor(getResources().getColor(R.color.CardBackgroudn));
-                            cardViewProfile.setVisibility(View.VISIBLE);
-                            cardViewEditProfile.setVisibility(View.GONE);
-                            actualizeazaPacientCurent(mapToSend);
-                            incarcaDate();
-
-                        }
-                    }, 100);
+//                    final Handler handler = new Handler(Looper.getMainLooper());
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            progressDialog.dismiss();
+//                            Toast.makeText(ProfileViewActivity.this, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
+//                            imgEditProfile.setBackgroundColor(getResources().getColor(R.color.CardBackgroudn));
+//                            cardViewProfile.setVisibility(View.VISIBLE);
+//                            cardViewEditProfile.setVisibility(View.GONE);
+//                            actualizeazaPacientCurent(mapToSend);
+//                            incarcaDate();
+//
+//                        }
+//                    }, 100);
                 }
             }
         });
