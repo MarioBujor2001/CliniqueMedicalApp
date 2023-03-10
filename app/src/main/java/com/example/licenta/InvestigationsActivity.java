@@ -20,7 +20,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.licenta.Adapters.CheckoutAdapter;
 import com.example.licenta.Adapters.InvestigationAdapter;
 import com.example.licenta.Models.Investigatie;
 import com.example.licenta.Models.Specialitate;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 public class InvestigationsActivity extends AppCompatActivity {
     private RecyclerView recvInvestigations;
     private ArrayList<Investigatie> investigations;
+    private ArrayList<Investigatie> currentInvestigationsCart;
     private InvestigationAdapter adapter;
     private TextView txtInvestigationsTotal;
     private float currentTotal = 0;
@@ -47,9 +50,14 @@ public class InvestigationsActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             float itemValue = intent.getFloatExtra("value",0);
-            currentTotal += itemValue;
-            txtInvestigationsTotal.setText(currentTotal + " Ron");
-            Log.i("broadcast", "received");
+            Investigatie investigation = (Investigatie) intent.getSerializableExtra("investigation");
+            if(!currentInvestigationsCart.contains(investigation)){
+                currentTotal += itemValue;
+                txtInvestigationsTotal.setText(currentTotal + " Ron");
+                currentInvestigationsCart.add(investigation);
+            }else{
+                Toast.makeText(context, "Already in cart!", Toast.LENGTH_SHORT).show();
+            }
         }
     };
     public BroadcastReceiver receivedInvestigationReceiver = new BroadcastReceiver() {
@@ -118,7 +126,8 @@ public class InvestigationsActivity extends AppCompatActivity {
         final View checkoutPop = getLayoutInflater().inflate(R.layout.checkout_popup, null);
         ListView lvOrder = checkoutPop.findViewById(R.id.lvOrder);
         Button btnCheckout = checkoutPop.findViewById(R.id.btnCheckOut);
-        ArrayAdapter<Investigatie> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, investigations);
+//        ArrayAdapter<Investigatie> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, investigations);
+        CheckoutAdapter adapter = new CheckoutAdapter(InvestigationsActivity.this, currentInvestigationsCart);
         lvOrder.setAdapter(adapter);
 
         dialogBuilder.setView(checkoutPop);
@@ -130,6 +139,7 @@ public class InvestigationsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        currentInvestigationsCart = new ArrayList<>();
         LocalBroadcastManager.getInstance(this).registerReceiver(receivedInvestigationReceiver, new IntentFilter("apiMessageInvestigation"));
         createLoadingDialog();
         if(APICommunication.investigationsArray==null){

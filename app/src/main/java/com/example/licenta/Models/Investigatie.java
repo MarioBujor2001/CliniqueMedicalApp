@@ -1,6 +1,8 @@
 package com.example.licenta.Models;
 
-public class Investigatie {
+import java.io.Serializable;
+
+public class Investigatie implements Serializable {
     private String name;
     private float price;
     private Specialitate specialty;

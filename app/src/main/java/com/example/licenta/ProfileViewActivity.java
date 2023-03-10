@@ -3,10 +3,14 @@ package com.example.licenta;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -40,6 +44,25 @@ public class ProfileViewActivity extends AppCompatActivity {
     private boolean btnEditToggleState;
     private ProgressDialog progressDialog;
     private String filePath;
+
+    public BroadcastReceiver finishedUploadingPicture = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isSucces = intent.getBooleanExtra("success", false);
+            if(isSucces){
+                btnSubmitChanges.setEnabled(true);
+            }else{
+                //TODO: if picture does not load
+            }
+        }
+    };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver(finishedUploadingPicture,
+                new IntentFilter("finishedUploadingPicture"));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +149,7 @@ public class ProfileViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (btnEditToggleState) {
+                    btnSubmitChanges.setEnabled(false);
                     Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                     photoPickerIntent.setType("image/*");
                     startActivityForResult(photoPickerIntent, 1);
@@ -204,7 +228,7 @@ public class ProfileViewActivity extends AppCompatActivity {
                 Uri selectedImage = data.getData();
                 APICommunication.uploadPictureFirebase(selectedImage, getApplicationContext(), p);
                 imgProfile.setImageURI(selectedImage);
-
+                //
 //                filePath = getPath(selectedImage);
 ////                File file = new File(selectedImage.getPath());
 ////                APICommunication.postPicture(file, getApplicationContext());
@@ -222,6 +246,8 @@ public class ProfileViewActivity extends AppCompatActivity {
 //                } else {
 //                    //NOT IN REQUIRED FORMAT
 //                }
+            }else{
+                btnSubmitChanges.setEnabled(true);
             }
         }
     }

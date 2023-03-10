@@ -54,6 +54,7 @@ public class InvestigationAdapter extends RecyclerView.Adapter<InvestigationAdap
             public void onClick(View view) {
                 Intent intent = new Intent("updateCart");
                 intent.putExtra("value", investigation.getPrice());
+                intent.putExtra("investigation", investigation);
                 LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
                 Log.i("broadcast", "sent");
             }

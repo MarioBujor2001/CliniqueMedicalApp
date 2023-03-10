@@ -82,7 +82,7 @@ public class APICommunication {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Toast.makeText(ctx, "Succesfully uploaded!", Toast.LENGTH_LONG).show();
-
+                sendIntent("finishedUploadingPicture", true, ctx);
                 storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
                     pacient.setPhoto(uri.toString());
                     Log.i("url out", uri.toString());
@@ -92,6 +92,7 @@ public class APICommunication {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(ctx, "Error occured!", Toast.LENGTH_LONG).show();
+                sendIntent("finishedUploadingPicture", false, ctx);
             }
         });
     }
