@@ -19,6 +19,7 @@ public class Programare implements Serializable {
     }
 
     public Programare() {
+        this.observatii = "n/a";
     }
 
     public Integer getId() {

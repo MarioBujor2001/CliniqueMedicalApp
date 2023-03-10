@@ -207,7 +207,7 @@ public class APICommunication {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 obj4Send.put("data", prog.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
             }
-            obj4Send.put("observatii", "n/a");
+            obj4Send.put("observatii", prog.getObservatii());
             RequestQueue queue = Volley.newRequestQueue(ctx);
             JsonObjectRequest jsReq = new JsonObjectRequest(Request.Method.POST,
                     APIURL + "/addProgramare",

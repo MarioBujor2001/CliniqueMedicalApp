@@ -249,6 +249,7 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
         TextView tvNumeMedic = addPop.findViewById(R.id.tvNumeMedicProgramarePOP);
         TextView tvData = addPop.findViewById(R.id.tvDataPOP);
         TextView tvOra = addPop.findViewById(R.id.tvOraPOP);
+        EditText edtMotivVizita = addPop.findViewById(R.id.edtMotivVizita);
         tvNumeMedic.setText("Dr. " + m.getFirstName() + " " + m.getLastName());
         btnChoseDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -313,7 +314,10 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
         btnVerifDisp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                APICommunication.pingProgramare(initProgramare(position, filtered, tvData.getText().toString(), tvOra.getText().toString()),
+                APICommunication.pingProgramare(initProgramare(position, filtered,
+                                tvData.getText().toString(),
+                                tvOra.getText().toString(),
+                                edtMotivVizita.getText().toString()),
                         p, getApplicationContext());
                 createLoadingDialog();
             }
@@ -321,7 +325,10 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
         btnProgrameaza.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                APICommunication.postProgramare(initProgramare(position, filtered, tvData.getText().toString(), tvOra.getText().toString()),
+                APICommunication.postProgramare(initProgramare(position, filtered,
+                                tvData.getText().toString(),
+                                tvOra.getText().toString(),
+                                edtMotivVizita.getText().toString()),
                         p, getApplicationContext());
                 createLoadingDialog();
             }
@@ -333,7 +340,7 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
                 setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
-    private Programare initProgramare(int position, boolean filtered, String data, String ora) {
+    private Programare initProgramare(int position, boolean filtered, String data, String ora, String observatii) {
         Programare prog = new Programare();
         Medic m;
         if (filtered) {
@@ -343,6 +350,9 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
         }
         prog.setMedic(m);
         prog.setPacient(p);
+        if(!observatii.equals("")){
+            prog.setObservatii(observatii);
+        }
         String dataOra = data.substring(6) + " " + ora.substring(5);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             prog.setData(LocalDateTime.parse(dataOra, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
