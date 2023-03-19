@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="490dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="10dp"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    android:layout_marginTop="10dp"
+    android:id="@+id/parentCardMedic">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/info_card_background">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTopList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTotalComanda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.18" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineBottomList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.90" />
+
+<!--        Comanda-->
+        <TextView
+            android:id="@+id/txtComanda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/comanda"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtComandaNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/orderno_placeholder"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@id/txtComanda"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--        Data-->
+        <TextView
+            android:id="@+id/txtDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/data_order"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineTotalComanda"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtComanda" />
+
+        <TextView
+            android:id="@+id/txtDateOrdered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/date_placeholder"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineTotalComanda"
+            app:layout_constraintStart_toEndOf="@id/txtComanda"
+            app:layout_constraintTop_toBottomOf="@id/txtComandaNo" />
+
+        <!--        Data-->
+        <TextView
+            android:id="@+id/txtAmmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/total_comanda"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineTopList"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guidelineTotalComanda" />
+
+        <TextView
+            android:id="@+id/txtAmmountOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/price_placeholder"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineTopList"
+            app:layout_constraintStart_toEndOf="@id/txtComanda"
+            app:layout_constraintTop_toBottomOf="@id/guidelineTotalComanda" />
+
+        <ListView
+            android:id="@+id/lvInvestigationOrdered"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineBottomList"
+            app:layout_constraintTop_toTopOf="@+id/guidelineTopList" />
+
+        <Button
+            android:id="@+id/btnGenerator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/genereaza_factura"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guidelineBottomList" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

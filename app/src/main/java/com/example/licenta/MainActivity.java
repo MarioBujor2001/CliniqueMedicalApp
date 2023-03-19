@@ -48,7 +48,7 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
     private TextView tvUserName, txtYouDontHaveAppointments;
     private FirebaseAuth mAuth;
-    private CardView allMedicsCard, viewProfile, allProgramari, aboutCard, investigationCard;
+    private CardView allMedicsCard, viewProfile, allProgramari, aboutCard, investigationCard, ordersCard;
     private RecyclerView recvAppointments;
     private ImageView imgProfile;
     private ProgressDialog progressDialog;
@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
         allMedicsCard = findViewById(R.id.allMedicsCard);
         allProgramari = findViewById(R.id.allProgramariCard);
         aboutCard = findViewById(R.id.aboutCliniqueCard);
+        ordersCard = findViewById(R.id.ordersCard);
         investigationCard = findViewById(R.id.investigationCard);
         imgProfile = findViewById(R.id.userProfile);
         viewProfile = findViewById(R.id.viewProfile);
@@ -159,6 +160,11 @@ public class MainActivity extends AppCompatActivity {
         investigationCard.setOnClickListener(v -> {
 //            startActivity(new Intent(MainActivity.this, InvestigationsActivity.class));
             Intent i = new Intent(MainActivity.this, InvestigationsActivity.class);
+            i.putExtra("pacient", p);
+            startActivity(i);
+        });
+        ordersCard.setOnClickListener(view -> {
+            Intent i = new Intent(MainActivity.this, OrderHistoryActivity.class);
             i.putExtra("pacient", p);
             startActivity(i);
         });

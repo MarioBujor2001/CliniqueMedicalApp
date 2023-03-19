@@ -67,6 +67,13 @@
     <string name="orders">Orders</string>
     <string name="daily_news">Daily News</string>
     <string name="speak_to_a_doctor">Speak to a doctor</string>
+    <string name="comanda">Comanda:</string>
+    <string name="orderno_placeholder">#1001</string>
+    <string name="date_placeholder">dd-MM-yyyy HH:mm</string>
+    <string name="data_order">Data:</string>
+    <string name="total_comanda">Total comanda:</string>
+    <string name="genereaza_factura">Genereaza factura</string>
+    <string name="more_info">More info</string>
     <string-array name="filterMedics">
         <item>orl</item>
         <item>alergologie</item>

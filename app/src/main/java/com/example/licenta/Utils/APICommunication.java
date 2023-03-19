@@ -50,6 +50,7 @@ public class APICommunication {
     public static JSONArray mediciArray;
     public static JSONArray appointmentsArray;
     public static JSONArray investigationsArray;
+    public static JSONArray ordersArray;
     public static String encodedImage;
     public static boolean invalidAppointment = false;
     private final static String APIURL = "http://192.168.100.75:8080/api";
@@ -411,6 +412,28 @@ public class APICommunication {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void getOrders(Context ctx, Pacient pac){
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+        JsonArrayRequest jsReq = new JsonArrayRequest(Request.Method.GET,
+                APIURL + "/getOrder?idPac=" + pac.getId(),
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        ordersArray = response;
+                        sendIntent("apiMessageOrdersReceived", true, ctx);
+                        Log.i("ordersCount", String.valueOf(appointmentsArray.length()));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley:", error.toString());
+                    }
+                });
+        queue.add(jsReq);
     }
 
     public static void sendIntent(String action, boolean isSuccessful, Context context) {
