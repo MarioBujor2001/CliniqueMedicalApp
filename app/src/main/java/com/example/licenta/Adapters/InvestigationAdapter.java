@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.licenta.Models.Investigatie;
+import com.example.licenta.Models.Investigation;
 import com.example.licenta.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -20,18 +20,18 @@ import java.util.ArrayList;
 
 public class InvestigationAdapter extends RecyclerView.Adapter<InvestigationAdapter.ViewHolder> {
 
-    private ArrayList<Investigatie> investigations = new ArrayList<>();
+    private ArrayList<Investigation> investigations = new ArrayList<>();
     private Context ctx;
 
     public InvestigationAdapter(Context ctx) {
         this.ctx = ctx;
     }
 
-    public ArrayList<Investigatie> getInvestigations() {
+    public ArrayList<Investigation> getInvestigations() {
         return investigations;
     }
 
-    public void setInvestigations(ArrayList<Investigatie> investigations) {
+    public void setInvestigations(ArrayList<Investigation> investigations) {
         this.investigations = investigations;
         notifyDataSetChanged();
     }
@@ -45,7 +45,7 @@ public class InvestigationAdapter extends RecyclerView.Adapter<InvestigationAdap
 
     @Override
     public void onBindViewHolder(@NonNull InvestigationAdapter.ViewHolder holder, int position) {
-        Investigatie investigation = investigations.get(position);
+        Investigation investigation = investigations.get(position);
         holder.txtInvestigationSpecialty.setText(investigation.getSpecialty().getTip().toString());
         holder.txtInvestigationPrice.setText(String.valueOf(investigation.getPrice()) + " Ron");
         holder.txtInvestigationName.setText(String.valueOf(investigation.getName()));

@@ -157,7 +157,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, AboutActivity.class));
         });
         investigationCard.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, InvestigationsActivity.class));
+//            startActivity(new Intent(MainActivity.this, InvestigationsActivity.class));
+            Intent i = new Intent(MainActivity.this, InvestigationsActivity.class);
+            i.putExtra("pacient", p);
+            startActivity(i);
         });
     }
 

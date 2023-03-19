@@ -114,8 +114,8 @@
         android:layout_height="0dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="10dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
@@ -128,19 +128,96 @@
             android:layout_height="match_parent"
             android:background="@drawable/info_card_background">
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.05" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.25" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.28" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.48" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.51" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.71" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.74" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineMiddle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.50" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineTop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.0" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="1" />
+
+
             <!--            medic function-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/allMedicsCard"
-                android:layout_width="85dp"
+                android:layout_width="0dp"
                 android:layout_height="75dp"
-                android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/guideline8"
+                app:layout_constraintEnd_toStartOf="@id/guideline9"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/guidelineTop">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -164,7 +241,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_medium"
                         android:text="@string/all_medics"
-                        android:textSize="11sp"
+                        android:textSize="10sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.57"
                         app:layout_constraintStart_toStartOf="parent"
@@ -176,16 +253,15 @@
             <!--            programari card-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/allProgramariCard"
-                android:layout_width="85dp"
+                android:layout_width="0dp"
                 android:layout_height="75dp"
-                android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline11"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/allMedicsCard"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintStart_toEndOf="@id/guideline10"
+                app:layout_constraintTop_toBottomOf="@id/guidelineTop">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -209,8 +285,9 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_medium"
                         android:text="@string/appointments"
-                        android:textSize="11sp"
+                        android:textSize="10sp"
                         app:layout_constraintEnd_toEndOf="parent"
+                        android:textAlignment="center"
                         app:layout_constraintHorizontal_bias="0.57"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/imageViewAllProgramari" />
@@ -221,16 +298,15 @@
             <!--            about cliniq card-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/aboutCliniqueCard"
-                android:layout_width="85dp"
+                android:layout_width="0dp"
                 android:layout_height="75dp"
-                android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline13"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/allProgramariCard"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintStart_toEndOf="@id/guideline12"
+                app:layout_constraintTop_toBottomOf="@id/guidelineTop">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -254,7 +330,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_medium"
                         android:text="@string/about_clinique"
-                        android:textSize="11sp"
+                        android:textSize="10sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.57"
                         app:layout_constraintStart_toStartOf="parent"
@@ -266,17 +342,15 @@
             <!--            investigati card-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/investigationCard"
-                android:layout_width="85dp"
+                android:layout_width="0dp"
                 android:layout_height="75dp"
-                android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginEnd="10dp"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline15"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/aboutCliniqueCard"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintStart_toEndOf="@id/guideline14"
+                app:layout_constraintTop_toBottomOf="@id/guidelineTop">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -300,11 +374,140 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_medium"
                         android:text="@string/investigations"
-                        android:textSize="11sp"
+                        android:textSize="10sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.57"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/imageViewInvestigation" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!--            orders card-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/ordersCard"
+                android:layout_width="0dp"
+                android:layout_height="75dp"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                app:layout_constraintEnd_toStartOf="@id/guideline9"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@id/guideline8"
+                app:layout_constraintTop_toBottomOf="@id/guidelineMiddle">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageViewOrdersCard"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/shopping_cart"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    </ImageView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="@string/orders"
+                        android:textSize="10sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/imageViewOrdersCard" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!--            news card-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/newsCard"
+                android:layout_width="0dp"
+                android:layout_height="75dp"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                app:layout_constraintEnd_toStartOf="@id/guideline11"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@id/guideline10"
+                app:layout_constraintTop_toBottomOf="@id/guidelineMiddle">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageViewNews"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/news"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    </ImageView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="@string/daily_news"
+                        android:textSize="10sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/imageViewNews" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+<!--         speak to a doctor card-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/contactDoctorCard"
+                android:layout_width="0dp"
+                android:layout_height="75dp"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                app:layout_constraintEnd_toStartOf="@id/guideline15"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@id/guideline12"
+                app:layout_constraintTop_toBottomOf="@id/guidelineMiddle">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageViewContactDoctor"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/support"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    </ImageView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="@string/speak_to_a_doctor"
+                        android:textSize="10sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/imageViewContactDoctor" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
@@ -391,6 +594,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.43" />
+        app:layout_constraintGuide_percent="0.50" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

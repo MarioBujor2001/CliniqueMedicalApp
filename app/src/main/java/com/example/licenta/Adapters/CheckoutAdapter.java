@@ -10,13 +10,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.licenta.Models.Investigatie;
+import com.example.licenta.Models.Investigation;
 import com.example.licenta.R;
 
 import java.util.ArrayList;
 
-public class CheckoutAdapter extends ArrayAdapter<Investigatie> {
-    public CheckoutAdapter(@NonNull Context context, ArrayList<Investigatie> investigations){
+public class CheckoutAdapter extends ArrayAdapter<Investigation> {
+    public CheckoutAdapter(@NonNull Context context, ArrayList<Investigation> investigations){
         super(context, 0, investigations);
     }
 
@@ -31,7 +31,7 @@ public class CheckoutAdapter extends ArrayAdapter<Investigatie> {
         TextView txtInvestigationSpecialtyCheckout = convertView.findViewById(R.id.txtInvestigationSpecialtyCheckout);
         TextView txtInvestigationPriceCheckout = convertView.findViewById(R.id.txtInvestigationPriceCheckout);
 
-        Investigatie investigation = getItem(position);
+        Investigation investigation = getItem(position);
 
         txtInvestigationNameCheckout.setText(investigation.getName());
         txtInvestigationSpecialtyCheckout.setText(investigation.getSpecialty().getTip().toString());

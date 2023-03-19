@@ -2,20 +2,21 @@ package com.example.licenta.Models;
 
 import java.io.Serializable;
 
-public class Investigatie implements Serializable {
+public class Investigation implements Serializable {
+    private Integer id;
     private String name;
     private float price;
     private Specialitate specialty;
     private String description;
 
-    public Investigatie(String name, float price, Specialitate specialty, String description) {
+    public Investigation(Integer id, String name, float price, Specialitate specialty, String description) {
         this.name = name;
         this.price = price;
         this.specialty = specialty;
         this.description = description;
     }
 
-    public Investigatie() {
+    public Investigation() {
     }
 
     public String getName() {
@@ -42,8 +43,24 @@ public class Investigatie implements Serializable {
         this.specialty = specialty;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
-        return name + " " + price;
+        return id + " " + name + " " + price;
     }
 }

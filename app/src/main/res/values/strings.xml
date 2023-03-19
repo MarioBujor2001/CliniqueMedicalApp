@@ -40,7 +40,7 @@
     <string name="cancel">Cancel</string>
     <string name="reschedule">Reschedule</string>
     <string name="hh_mm">HH:mm</string>
-    <string name="about_clinique">About Clinique</string>
+    <string name="about_clinique">About Us</string>
     <string name="placeholder">PLACEHOLDER</string>
     <string name="investigations">Investigations</string>
     <string name="about_our_clinic">About our clinic</string>
@@ -64,6 +64,9 @@
     <string name="future">Future</string>
     <string name="past">Past</string>
     <string name="luckily_you_don_t_have_any_appointments">You don\'t have any appointments this week</string>
+    <string name="orders">Orders</string>
+    <string name="daily_news">Daily News</string>
+    <string name="speak_to_a_doctor">Speak to a doctor</string>
     <string-array name="filterMedics">
         <item>orl</item>
         <item>alergologie</item>

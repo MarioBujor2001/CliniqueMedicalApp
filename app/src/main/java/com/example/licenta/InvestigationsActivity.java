@@ -16,7 +16,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,11 +23,11 @@ import android.widget.Toast;
 
 import com.example.licenta.Adapters.CheckoutAdapter;
 import com.example.licenta.Adapters.InvestigationAdapter;
-import com.example.licenta.Models.Investigatie;
+import com.example.licenta.Models.Investigation;
+import com.example.licenta.Models.Pacient;
 import com.example.licenta.Models.Specialitate;
 import com.example.licenta.Models.Specialitati;
 import com.example.licenta.Utils.APICommunication;
-import com.google.android.gms.common.api.Api;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,8 +36,8 @@ import java.util.ArrayList;
 
 public class InvestigationsActivity extends AppCompatActivity {
     private RecyclerView recvInvestigations;
-    private ArrayList<Investigatie> investigations;
-    private ArrayList<Investigatie> currentInvestigationsCart;
+    private ArrayList<Investigation> investigations;
+    private ArrayList<Investigation> currentInvestigationsCart;
     private InvestigationAdapter adapter;
     private TextView txtInvestigationsTotal;
     private float currentTotal = 0;
@@ -46,16 +45,17 @@ public class InvestigationsActivity extends AppCompatActivity {
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     private ProgressDialog progressDialog;
+    private Pacient pacient;
     public BroadcastReceiver updateCartReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            float itemValue = intent.getFloatExtra("value",0);
-            Investigatie investigation = (Investigatie) intent.getSerializableExtra("investigation");
-            if(!currentInvestigationsCart.contains(investigation)){
+            float itemValue = intent.getFloatExtra("value", 0);
+            Investigation investigation = (Investigation) intent.getSerializableExtra("investigation");
+            if (!currentInvestigationsCart.contains(investigation)) {
                 currentTotal += itemValue;
                 txtInvestigationsTotal.setText(currentTotal + " Ron");
                 currentInvestigationsCart.add(investigation);
-            }else{
+            } else {
                 Toast.makeText(context, "Already in cart!", Toast.LENGTH_SHORT).show();
             }
         }
@@ -63,8 +63,8 @@ public class InvestigationsActivity extends AppCompatActivity {
     public BroadcastReceiver receivedInvestigationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean isSucces = intent.getBooleanExtra("success",false);
-            if(isSucces){
+            boolean isSucces = intent.getBooleanExtra("success", false);
+            if (isSucces) {
                 loadInvestigations();
                 reloadInvestigationAdapter();
                 cancelLoadingDialog();
@@ -72,28 +72,48 @@ public class InvestigationsActivity extends AppCompatActivity {
         }
     };
 
-    private void loadInvestigations(){
-        try{
+    public BroadcastReceiver receivedOrderInsertConfirmation = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isSucces = intent.getBooleanExtra("success", false);
+            if (isSucces) {
+                dialog.dismiss();
+                Toast.makeText(context, "Order placed successfully!", Toast.LENGTH_SHORT).show();
+                currentInvestigationsCart = new ArrayList<>();
+                resetOrderAmount();
+            }
+        }
+    };
+
+    private void resetOrderAmount(){
+        currentTotal = 0;
+        txtInvestigationsTotal.setText(currentTotal + " Ron");
+    }
+
+    private void loadInvestigations() {
+        try {
             investigations = new ArrayList<>();
-            for(int i=0;i<APICommunication.investigationsArray.length();i++){
+            for (int i = 0; i < APICommunication.investigationsArray.length(); i++) {
                 JSONObject currentInvestigation = APICommunication.investigationsArray.getJSONObject(i);
-                Investigatie investigation = new Investigatie();
+                Investigation investigation = new Investigation();
+                investigation.setId(currentInvestigation.getInt("id"));
                 investigation.setName(currentInvestigation.getString("nume"));
-                investigation.setPrice(((Double)currentInvestigation.get("pret")).floatValue());
-                try{
+                investigation.setPrice(((Double) currentInvestigation.get("pret")).floatValue());
+                Log.i("to check invest", investigation.toString());
+                try {
                     JSONObject specObj = (JSONObject) currentInvestigation.get("specialitate");
                     investigation.setSpecialty(new Specialitate(Specialitati.valueOf(specObj.getString("tip")), specObj.getString("descriere")));
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 investigations.add(investigation);
             }
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void reloadInvestigationAdapter(){
+    private void reloadInvestigationAdapter() {
         adapter = new InvestigationAdapter(getApplicationContext());
         adapter.setInvestigations(investigations);
         recvInvestigations.setAdapter(adapter);
@@ -109,8 +129,6 @@ public class InvestigationsActivity extends AppCompatActivity {
         btnSeeCart = findViewById(R.id.btnSeeCart);
         txtInvestigationsTotal.setText(currentTotal + " Ron");
         investigations = new ArrayList<>();
-        investigations.add(new Investigatie("Invest1", 120, new Specialitate(Specialitati.dermatologie,"ceva"), "ceva"));
-        investigations.add(new Investigatie("Invest2", 240, new Specialitate(Specialitati.cardiologie,"ceva"), "ceva"));
         //reloadInvestigationAdapter();
         LocalBroadcastManager.getInstance(this).registerReceiver(updateCartReceiver, new IntentFilter("updateCart"));
         btnSeeCart.setOnClickListener(new View.OnClickListener() {
@@ -121,14 +139,20 @@ public class InvestigationsActivity extends AppCompatActivity {
         });
     }
 
-    public void createCheckoutSummaryPopUp(){
+    public void createCheckoutSummaryPopUp() {
         dialogBuilder = new AlertDialog.Builder(this);
         final View checkoutPop = getLayoutInflater().inflate(R.layout.checkout_popup, null);
         ListView lvOrder = checkoutPop.findViewById(R.id.lvOrder);
         Button btnCheckout = checkoutPop.findViewById(R.id.btnCheckOut);
-//        ArrayAdapter<Investigatie> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, investigations);
         CheckoutAdapter adapter = new CheckoutAdapter(InvestigationsActivity.this, currentInvestigationsCart);
         lvOrder.setAdapter(adapter);
+
+        btnCheckout.setOnClickListener(view -> {
+            if (!currentInvestigationsCart.isEmpty()) {
+                btnCheckout.setEnabled(false);
+                APICommunication.postOrder(getApplicationContext(), pacient, currentInvestigationsCart);
+            }
+        });
 
         dialogBuilder.setView(checkoutPop);
         dialog = dialogBuilder.create();
@@ -139,13 +163,15 @@ public class InvestigationsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        pacient = (Pacient) getIntent().getSerializableExtra("pacient");
         currentInvestigationsCart = new ArrayList<>();
         LocalBroadcastManager.getInstance(this).registerReceiver(receivedInvestigationReceiver, new IntentFilter("apiMessageInvestigation"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receivedOrderInsertConfirmation, new IntentFilter("apiMessageOrderCreate"));
         createLoadingDialog();
-        if(APICommunication.investigationsArray==null){
+        if (APICommunication.investigationsArray == null) {
             //cerem date
-            APICommunication.getInvestigations(getApplication());
-        }else {
+            APICommunication.getInvestigations(getApplicationContext());
+        } else {
             //doar reincarcam datele
             loadInvestigations();
             reloadInvestigationAdapter();
@@ -154,14 +180,14 @@ public class InvestigationsActivity extends AppCompatActivity {
         //broadcast receiver va incarca datele;
     }
 
-    private void createLoadingDialog(){
+    private void createLoadingDialog() {
         progressDialog = new ProgressDialog(this);
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
     }
 
-    private void cancelLoadingDialog(){
+    private void cancelLoadingDialog() {
         progressDialog.dismiss();
     }
 }

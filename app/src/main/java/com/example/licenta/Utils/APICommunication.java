@@ -1,6 +1,5 @@
 package com.example.licenta.Utils;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,16 +11,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.licenta.MedicsListActivity;
+import com.example.licenta.Models.Investigation;
 import com.example.licenta.Models.Pacient;
 import com.example.licenta.Models.Programare;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,11 +37,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -234,7 +231,7 @@ public class APICommunication {
         }
     }
 
-    public static void deleteProgramare(Programare prog, String pacId ,Context ctx){
+    public static void deleteProgramare(Programare prog, String pacId, Context ctx) {
         RequestQueue queue = Volley.newRequestQueue(ctx);
         JsonObjectRequest jsReq = new JsonObjectRequest(Request.Method.DELETE,
                 APIURL + "/deleteProg?idProg=" + prog.getId(),
@@ -242,7 +239,7 @@ public class APICommunication {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        if(pacId != null){
+                        if (pacId != null) {
                             APICommunication.getAppointments(pacId, ctx);
                         }
                     }
@@ -366,7 +363,7 @@ public class APICommunication {
         queue.add(jsReq);
     }
 
-    public static void getInvestigations(Context ctx){
+    public static void getInvestigations(Context ctx) {
         RequestQueue queue = Volley.newRequestQueue(ctx);
         JsonArrayRequest jsReq = new JsonArrayRequest(Request.Method.GET,
                 APIURL + "/getInvestigatii",
@@ -386,7 +383,37 @@ public class APICommunication {
         queue.add(jsReq);
     }
 
-    public static void sendIntent(String action, boolean isSuccessful, Context context){
+    public static void postOrder(Context ctx, Pacient pac, List<Investigation> investigations) {
+        JSONObject obj4Send = new JSONObject();
+        try {
+            for (int i = 0; i < investigations.size(); i++) {
+                obj4Send.put(String.valueOf(i), investigations.get(i).getId());
+            }
+            RequestQueue queue = Volley.newRequestQueue(ctx);
+            JsonObjectRequest jsReq = new JsonObjectRequest(Request.Method.POST,
+                    APIURL + "/addOrder?idPac=" + pac.getId(),
+                    obj4Send,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.i("VolleyPostProg:", response.toString());
+                            sendIntent("apiMessageOrderCreate",true,ctx);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //va intra aici deoarece nu primi nimic inapoi
+                            Log.i("VolleyErrPostProg:", error.toString());
+                        }
+                    });
+            queue.add(jsReq);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sendIntent(String action, boolean isSuccessful, Context context) {
         Intent intent = new Intent(action);
         intent.putExtra("success", isSuccessful);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
