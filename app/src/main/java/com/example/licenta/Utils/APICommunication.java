@@ -53,8 +53,8 @@ public class APICommunication {
     public static JSONArray ordersArray;
     public static String encodedImage;
     public static boolean invalidAppointment = false;
-    private final static String APIURL = "http://192.168.100.75:8080/api";
-    //    private final static String APIURL = "http://172.20.10.3:8080/api";
+//    private final static String APIURL = "http://192.168.100.75:8080/api";
+        private final static String APIURL = "http://172.20.10.3:8080/api";
     private static StorageReference storageReference;
 
     public static void encodeFileBase64(File file) {

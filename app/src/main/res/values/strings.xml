@@ -74,6 +74,9 @@
     <string name="total_comanda">Total comanda:</string>
     <string name="genereaza_factura">Genereaza factura</string>
     <string name="more_info">More info</string>
+    <string name="daily_news_health_tips">Daily News - Health Tips</string>
+    <string name="news_title_placeholder">News title placeholder</string>
+    <string name="see_more">See more</string>
     <string-array name="filterMedics">
         <item>orl</item>
         <item>alergologie</item>
