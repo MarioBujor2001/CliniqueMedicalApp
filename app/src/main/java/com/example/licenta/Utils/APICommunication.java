@@ -51,10 +51,11 @@ public class APICommunication {
     public static JSONArray appointmentsArray;
     public static JSONArray investigationsArray;
     public static JSONArray ordersArray;
+    public static JSONArray forumPostsArray;
     public static String encodedImage;
     public static boolean invalidAppointment = false;
-//    private final static String APIURL = "http://192.168.100.75:8080/api";
-        private final static String APIURL = "http://172.20.10.3:8080/api";
+    private final static String APIURL = "http://192.168.100.75:8080/api";
+//        private final static String APIURL = "http://172.20.10.3:8080/api";
     private static StorageReference storageReference;
 
     public static void encodeFileBase64(File file) {
@@ -425,6 +426,27 @@ public class APICommunication {
                         ordersArray = response;
                         sendIntent("apiMessageOrdersReceived", true, ctx);
                         Log.i("ordersCount", String.valueOf(appointmentsArray.length()));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley:", error.toString());
+                    }
+                });
+        queue.add(jsReq);
+    }
+
+    public static void getForumPosts(Context ctx){
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+        JsonArrayRequest jsReq = new JsonArrayRequest(Request.Method.GET,
+                APIURL + "/forum-posts",
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        forumPostsArray = response;
+                        sendIntent("apiMessageForumPostsReceived", true, ctx);
                     }
                 },
                 new Response.ErrorListener() {

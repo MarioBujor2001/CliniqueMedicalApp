@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -33,8 +34,11 @@ import com.example.licenta.Utils.APICommunication;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -179,5 +183,13 @@ public class OrderHistoryActivity extends AppCompatActivity {
         dialog.show();
         dialog.getWindow().
                 setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    private void createPDF() throws FileNotFoundException {
+        String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+        File file = new File(pdfPath,"user.pdf");
+        OutputStream outStream = new FileOutputStream(file);
+
+
     }
 }

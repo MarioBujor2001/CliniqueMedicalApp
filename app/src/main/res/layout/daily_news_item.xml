@@ -71,12 +71,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:gravity="center"
+            android:textAlignment="center"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/news_title_placeholder"
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/guidelineNewsEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineNewsStart"
-            app:layout_constraintTop_toTopOf="@+id/guidelineContentStart" />
+            app:layout_constraintTop_toTopOf="@+id/guidelineContentStart"
+            app:layout_constraintBottom_toTopOf="@id/btnSeeMoreNews"/>
 
         <Button
             android:id="@+id/btnSeeMoreNews"

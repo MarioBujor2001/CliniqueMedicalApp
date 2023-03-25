@@ -1,19 +1,21 @@
 package com.example.licenta.Models;
 
-public class DailyNews {
+import java.io.Serializable;
+
+public class ForumPost implements Serializable {
     private int id;
     private String imgUrl;
     private String title;
     private String content;
 
-    public DailyNews(int id, String imgUrl, String title, String content) {
+    public ForumPost(int id, String imgUrl, String title, String content) {
         this.id = id;
         this.imgUrl = imgUrl;
         this.title = title;
         this.content = content;
     }
 
-    public DailyNews() {
+    public ForumPost() {
     }
 
     public int getId() {
