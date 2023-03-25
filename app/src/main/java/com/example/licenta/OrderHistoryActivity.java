@@ -2,6 +2,7 @@ package com.example.licenta;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,8 +12,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -55,6 +54,14 @@ public class OrderHistoryActivity extends AppCompatActivity {
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
 
+    //forPopup
+    private CardView popUpCard;
+    private TextView txtComandaNo;
+    private TextView txtDateOrdered;
+    private TextView txtAmmountOrder;
+    private Button btnGenerator;
+    private ListView lvInvestigationOrdered;
+
     private BroadcastReceiver receiveMoreInfoOrder = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -65,7 +72,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         Optional<Order> order = orderList.stream().filter(o -> o.getId() == orderId).findFirst();
                         if (order.isPresent()) {
-                            generateMoreInfoPopUp(order.get());
+                            generateMoreInfo(order.get());
                         }
                     }
                 }
@@ -90,6 +97,12 @@ public class OrderHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_history);
         recvOrders = findViewById(R.id.recvOrders);
+        popUpCard = findViewById(R.id.popUpCard);
+        txtComandaNo = findViewById(R.id.txtComandaNo);
+        txtDateOrdered = findViewById(R.id.txtDateOrdered);
+        txtAmmountOrder = findViewById(R.id.txtAmmountOrder);
+        btnGenerator = findViewById(R.id.btnGenerator);
+        lvInvestigationOrdered = findViewById(R.id.lvInvestigationOrdered);
     }
 
     @Override
@@ -159,14 +172,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
         recvOrders.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
     }
 
-    public void generateMoreInfoPopUp(Order order) {
-        dialogBuilder = new AlertDialog.Builder(OrderHistoryActivity.this);
-        final View addPop = getLayoutInflater().inflate(R.layout.order_item_popup, null);
-        TextView txtComandaNo = addPop.findViewById(R.id.txtComandaNo);
-        TextView txtDateOrdered = addPop.findViewById(R.id.txtDateOrdered);
-        TextView txtAmmountOrder = addPop.findViewById(R.id.txtAmmountOrder);
-        Button btnGenerator = addPop.findViewById(R.id.btnGenerator);
-        ListView lvInvestigationOrdered = addPop.findViewById(R.id.lvInvestigationOrdered);
+    public void generateMoreInfo(Order order) {
         txtComandaNo.setText("#" + order.getId());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             txtDateOrdered.setText(order.getData().format(DateTimeFormatter.ISO_DATE));
@@ -178,18 +184,21 @@ public class OrderHistoryActivity extends AppCompatActivity {
         txtAmmountOrder.setText(total + " Ron");
         ArrayAdapter<Investigation> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, order.getInvestigations());
         lvInvestigationOrdered.setAdapter(adapter);
-        dialogBuilder.setView(addPop);
-        dialog = dialogBuilder.create();
-        dialog.show();
-        dialog.getWindow().
-                setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popUpCard.setVisibility(View.VISIBLE);
     }
 
     private void createPDF() throws FileNotFoundException {
         String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
         File file = new File(pdfPath,"user.pdf");
         OutputStream outStream = new FileOutputStream(file);
+    }
 
-
+    @Override
+    public void onBackPressed() {
+        if(popUpCard.getVisibility()==View.VISIBLE){
+            popUpCard.setVisibility(View.GONE);
+        }else{
+            finish();
+        }
     }
 }
