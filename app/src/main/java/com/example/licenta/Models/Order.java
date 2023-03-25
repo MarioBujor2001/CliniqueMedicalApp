@@ -16,6 +16,14 @@ public class Order {
         return id;
     }
 
+    public float getTotal(){
+        float total = 0;
+        for(Investigation i:investigations){
+            total+=i.getPrice();
+        }
+        return total;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
