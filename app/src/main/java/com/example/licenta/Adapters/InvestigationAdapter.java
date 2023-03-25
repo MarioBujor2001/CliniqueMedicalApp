@@ -22,9 +22,11 @@ public class InvestigationAdapter extends RecyclerView.Adapter<InvestigationAdap
 
     private ArrayList<Investigation> investigations = new ArrayList<>();
     private Context ctx;
+    private int layout;
 
-    public InvestigationAdapter(Context ctx) {
+    public InvestigationAdapter(Context ctx, int layout) {
         this.ctx = ctx;
+        this.layout = layout;
     }
 
     public ArrayList<Investigation> getInvestigations() {
@@ -39,7 +41,7 @@ public class InvestigationAdapter extends RecyclerView.Adapter<InvestigationAdap
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.investigation_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
         return new InvestigationAdapter.ViewHolder(view);
     }
 
@@ -49,16 +51,18 @@ public class InvestigationAdapter extends RecyclerView.Adapter<InvestigationAdap
         holder.txtInvestigationSpecialty.setText(investigation.getSpecialty().getTip().toString());
         holder.txtInvestigationPrice.setText(String.valueOf(investigation.getPrice()) + " Ron");
         holder.txtInvestigationName.setText(String.valueOf(investigation.getName()));
-        holder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent("updateCart");
-                intent.putExtra("value", investigation.getPrice());
-                intent.putExtra("investigation", investigation);
-                LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
-                Log.i("broadcast", "sent");
-            }
-        });
+        if(holder.btnAddToCart!=null){
+            holder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent("updateCart");
+                    intent.putExtra("value", investigation.getPrice());
+                    intent.putExtra("investigation", investigation);
+                    LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
+                    Log.i("broadcast", "sent");
+                }
+            });
+        }
     }
 
     @Override

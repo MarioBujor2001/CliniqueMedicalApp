@@ -114,7 +114,7 @@ public class InvestigationsActivity extends AppCompatActivity {
     }
 
     private void reloadInvestigationAdapter() {
-        adapter = new InvestigationAdapter(getApplicationContext());
+        adapter = new InvestigationAdapter(getApplicationContext(), R.layout.investigation_item);
         adapter.setInvestigations(investigations);
         recvInvestigations.setAdapter(adapter);
         recvInvestigations.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));

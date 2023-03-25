@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.licenta.Adapters.InvestigationAdapter;
 import com.example.licenta.Adapters.OrdersAdapter;
 import com.example.licenta.Models.Investigation;
 import com.example.licenta.Models.Order;
@@ -51,8 +52,6 @@ public class OrderHistoryActivity extends AppCompatActivity {
     private List<Order> orderList;
     private Pacient pacient;
     private ProgressDialog progressDialog;
-    private AlertDialog.Builder dialogBuilder;
-    private AlertDialog dialog;
 
     //forPopup
     private CardView popUpCard;
@@ -60,7 +59,8 @@ public class OrderHistoryActivity extends AppCompatActivity {
     private TextView txtDateOrdered;
     private TextView txtAmmountOrder;
     private Button btnGenerator;
-    private ListView lvInvestigationOrdered;
+    private RecyclerView recvInvestigationOrdered;
+    private InvestigationAdapter investigationAdapter;
 
     private BroadcastReceiver receiveMoreInfoOrder = new BroadcastReceiver() {
         @Override
@@ -102,7 +102,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
         txtDateOrdered = findViewById(R.id.txtDateOrdered);
         txtAmmountOrder = findViewById(R.id.txtAmmountOrder);
         btnGenerator = findViewById(R.id.btnGenerator);
-        lvInvestigationOrdered = findViewById(R.id.lvInvestigationOrdered);
+        recvInvestigationOrdered = findViewById(R.id.lvInvestigationOrdered);
     }
 
     @Override
@@ -182,9 +182,15 @@ public class OrderHistoryActivity extends AppCompatActivity {
             total += i.getPrice();
         }
         txtAmmountOrder.setText(total + " Ron");
-        ArrayAdapter<Investigation> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, order.getInvestigations());
-        lvInvestigationOrdered.setAdapter(adapter);
+        reloadInvestigationAdapter(order.getInvestigations());
         popUpCard.setVisibility(View.VISIBLE);
+    }
+
+    private void reloadInvestigationAdapter(List<Investigation> investigations) {
+        investigationAdapter = new InvestigationAdapter(getApplicationContext(), R.layout.investigation_nobutton_item);
+        investigationAdapter.setInvestigations((ArrayList<Investigation>) investigations);
+        recvInvestigationOrdered.setAdapter(investigationAdapter);
+        recvInvestigationOrdered.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
     }
 
     private void createPDF() throws FileNotFoundException {

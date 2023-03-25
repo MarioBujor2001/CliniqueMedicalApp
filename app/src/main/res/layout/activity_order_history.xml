@@ -76,7 +76,7 @@
         android:id="@+id/popUpCard"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="30dp"
         app:cardElevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -187,7 +187,7 @@
                 app:layout_constraintStart_toEndOf="@id/txtComanda"
                 app:layout_constraintTop_toBottomOf="@id/guidelineTotalComanda" />
 
-            <ListView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/lvInvestigationOrdered"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
