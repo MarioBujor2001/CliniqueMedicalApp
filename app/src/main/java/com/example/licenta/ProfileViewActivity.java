@@ -156,22 +156,8 @@ public class ProfileViewActivity extends AppCompatActivity {
                     mapToSend.put("age", Integer.valueOf(edtAge.getText().toString().trim()));
                     mapToSend.put("cnp", edtCNP.getText().toString().trim());
                     mapToSend.put("address", edtAddress.getText().toString().trim());
-                    mapToSend.put("photo", p.getPhoto());
+                    mapToSend.put("photoUrl", p.getPhoto());
                     APICommunication.putPacient(mapToSend, ProfileViewActivity.this);
-//                    final Handler handler = new Handler(Looper.getMainLooper());
-//                    handler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            progressDialog.dismiss();
-//                            Toast.makeText(ProfileViewActivity.this, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
-//                            imgEditProfile.setBackgroundColor(getResources().getColor(R.color.CardBackgroudn));
-//                            cardViewProfile.setVisibility(View.VISIBLE);
-//                            cardViewEditProfile.setVisibility(View.GONE);
-//                            actualizeazaPacientCurent(mapToSend);
-//                            incarcaDate();
-//
-//                        }
-//                    }, 100);
                 }
             }
         });

@@ -1,6 +1,7 @@
 package com.example.licenta.Models;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public class Order {
@@ -10,6 +11,7 @@ public class Order {
     List<Investigation> investigations;
 
     public Order() {
+        this.data = LocalDateTime.now();
     }
 
     public Integer getId() {
