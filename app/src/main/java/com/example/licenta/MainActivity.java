@@ -1,6 +1,5 @@
 package com.example.licenta;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -12,25 +11,19 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.licenta.Adapters.MedicAdapter;
-import com.example.licenta.Adapters.ProgramareAdapter;
 import com.example.licenta.Adapters.ProgramareMainAdapter;
 import com.example.licenta.Models.Medic;
-import com.example.licenta.Models.Pacient;
-import com.example.licenta.Models.Programare;
-import com.example.licenta.Models.Specialitate;
-import com.example.licenta.Models.Specialitati;
+import com.example.licenta.Models.Patient;
+import com.example.licenta.Models.Appointment;
+import com.example.licenta.Models.Specialty;
+import com.example.licenta.Models.Specialties;
 import com.example.licenta.Utils.APICommunication;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,8 +35,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     private TextView tvUserName, txtYouDontHaveAppointments;
@@ -52,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recvAppointments;
     private ImageView imgProfile;
     private ProgressDialog progressDialog;
-    private Pacient p;
-    private ArrayList<Programare> programari;
+    private Patient p;
+    private ArrayList<Appointment> programari;
     private ProgramareMainAdapter adapter;
     private FirebaseUser user;
 
@@ -180,13 +171,13 @@ public class MainActivity extends AppCompatActivity {
             for(int i=0;i<APICommunication.appointmentsArray.length();i++){
 //                setarea info programare
                 JSONObject currentApp = APICommunication.appointmentsArray.getJSONObject(i);
-                Programare prog = new Programare();
+                Appointment prog = new Appointment();
                 prog.setId(currentApp.getInt("id"));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    prog.setData(LocalDateTime.parse(currentApp.getString("data"),
+                    prog.setDate(LocalDateTime.parse(currentApp.getString("data"),
                             DateTimeFormatter.ISO_DATE_TIME));
                 }
-                prog.setObservatii(currentApp.getString("observatii"));
+                prog.setComments(currentApp.getString("observatii"));
 
 //                setarea medicului programarii
                 JSONObject currentMedic = currentApp.getJSONObject("medic");
@@ -195,22 +186,22 @@ public class MainActivity extends AppCompatActivity {
                 m.setFirstName(currentMedic.getString("firstName"));
                 m.setLastName(currentMedic.getString("lastName"));
                 m.setEmail(currentMedic.getString("email"));
-                m.setVarsta(currentMedic.getInt("varsta"));
-                m.setAdresa(currentMedic.getString("adresa"));
-                m.setPhoto(currentMedic.getString("photo"));
+                m.setAge(currentMedic.getInt("varsta"));
+                m.setAddress(currentMedic.getString("adresa"));
+                m.setPhotoUrl(currentMedic.getString("photo"));
                 m.setCNP(currentMedic.getString("cnp"));
                 m.setRating((float) currentMedic.getDouble("rating"));
-                m.setVechime(currentMedic.getInt("vechime"));
+                m.setSeniority(currentMedic.getInt("vechime"));
                 try{
                     JSONObject specObj = (JSONObject) currentMedic.get("specialitate");
-                    m.setSpecialitate(new Specialitate(Specialitati.valueOf(specObj.getString("tip")), specObj.getString("descriere")));
+                    m.setSpecialty(new Specialty(Specialties.valueOf(specObj.getString("tip")), specObj.getString("descriere")));
                 }catch (Exception e){
                     e.printStackTrace();
                 }
                 prog.setMedic(m);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    if(LocalDateTime.now().until(prog.getData(), ChronoUnit.DAYS) < 7 &&
-                        LocalDateTime.now().isBefore(prog.getData()))
+                    if(LocalDateTime.now().until(prog.getDate(), ChronoUnit.DAYS) < 7 &&
+                        LocalDateTime.now().isBefore(prog.getDate()))
                         programari.add(prog);
                 }
             }
@@ -220,22 +211,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadPersonalInfo(String id){
-        p = new Pacient();
+        p = new Patient();
         try {
             p.setId(APICommunication.currentOBJ.getString("id"));
             p.setFirstName(APICommunication.currentOBJ.getString("firstName"));
             p.setLastName(APICommunication.currentOBJ.getString("lastName"));
             p.setEmail(APICommunication.currentOBJ.getString("email"));
-            p.setVarsta(APICommunication.currentOBJ.getInt("varsta"));
-            p.setAdresa(APICommunication.currentOBJ.getString("adresa"));
-            p.setPhoto(APICommunication.currentOBJ.getString("photo"));
+            p.setAge(APICommunication.currentOBJ.getInt("varsta"));
+            p.setAddress(APICommunication.currentOBJ.getString("adresa"));
+            p.setPhotoUrl(APICommunication.currentOBJ.getString("photo"));
             p.setGrad_urgenta(APICommunication.currentOBJ.getInt("grad_urgenta"));
             p.setCNP(APICommunication.currentOBJ.getString("cnp"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
         tvUserName.setText(p.getFirstName()+" "+p.getLastName());
-        Glide.with(getApplicationContext()).asBitmap().load(p.getPhoto()).into(imgProfile);
+        Glide.with(getApplicationContext()).asBitmap().load(p.getPhotoUrl()).into(imgProfile);
     }
 
 //    @Override

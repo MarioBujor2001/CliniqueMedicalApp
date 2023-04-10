@@ -24,9 +24,9 @@ import android.widget.Toast;
 import com.example.licenta.Adapters.CheckoutAdapter;
 import com.example.licenta.Adapters.InvestigationAdapter;
 import com.example.licenta.Models.Investigation;
-import com.example.licenta.Models.Pacient;
-import com.example.licenta.Models.Specialitate;
-import com.example.licenta.Models.Specialitati;
+import com.example.licenta.Models.Patient;
+import com.example.licenta.Models.Specialty;
+import com.example.licenta.Models.Specialties;
 import com.example.licenta.Utils.APICommunication;
 
 import org.json.JSONException;
@@ -45,7 +45,7 @@ public class InvestigationsActivity extends AppCompatActivity {
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     private ProgressDialog progressDialog;
-    private Pacient pacient;
+    private Patient pacient;
     public BroadcastReceiver updateCartReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -102,7 +102,7 @@ public class InvestigationsActivity extends AppCompatActivity {
                 Log.i("to check invest", investigation.toString());
                 try {
                     JSONObject specObj = (JSONObject) currentInvestigation.get("specialitate");
-                    investigation.setSpecialty(new Specialitate(Specialitati.valueOf(specObj.getString("tip")), specObj.getString("descriere")));
+                    investigation.setSpecialty(new Specialty(Specialties.valueOf(specObj.getString("tip")), specObj.getString("descriere")));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -163,7 +163,7 @@ public class InvestigationsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        pacient = (Pacient) getIntent().getSerializableExtra("pacient");
+        pacient = (Patient) getIntent().getSerializableExtra("pacient");
         currentInvestigationsCart = new ArrayList<>();
         LocalBroadcastManager.getInstance(this).registerReceiver(receivedInvestigationReceiver, new IntentFilter("apiMessageInvestigation"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receivedOrderInsertConfirmation, new IntentFilter("apiMessageOrderCreate"));

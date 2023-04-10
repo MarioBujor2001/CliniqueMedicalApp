@@ -48,7 +48,7 @@ public class InvestigationAdapter extends RecyclerView.Adapter<InvestigationAdap
     @Override
     public void onBindViewHolder(@NonNull InvestigationAdapter.ViewHolder holder, int position) {
         Investigation investigation = investigations.get(position);
-        holder.txtInvestigationSpecialty.setText(investigation.getSpecialty().getTip().toString());
+        holder.txtInvestigationSpecialty.setText(investigation.getSpecialty().getType().toString());
         holder.txtInvestigationPrice.setText(String.valueOf(investigation.getPrice()) + " Ron");
         holder.txtInvestigationName.setText(String.valueOf(investigation.getName()));
         if(holder.btnAddToCart!=null){

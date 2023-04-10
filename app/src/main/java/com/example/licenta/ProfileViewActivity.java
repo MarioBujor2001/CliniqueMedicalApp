@@ -12,11 +12,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
@@ -26,11 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.licenta.Models.Pacient;
+import com.example.licenta.Models.Patient;
 import com.example.licenta.Utils.APICommunication;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +33,7 @@ public class ProfileViewActivity extends AppCompatActivity {
     private CardView btnBackProfile, btnEditProfile, cardViewProfile, cardViewEditProfile;
     private ImageView imgProfile, imgEditProfile;
     private TextView tvName, tvEmail, tvCNP, tvAddress, tvAge;
-    private Pacient p;
+    private Patient p;
     private EditText edtFName, edtLName, edtAge, edtCNP, edtAddress;
     private Button btnSubmitChanges;
     private boolean btnEditToggleState;
@@ -118,7 +113,7 @@ public class ProfileViewActivity extends AppCompatActivity {
 
         btnEditToggleState = false;
 
-        p = (Pacient) getIntent().getSerializableExtra("PROFILE");
+        p = (Patient) getIntent().getSerializableExtra("PROFILE");
         incarcaDate();
         btnBackProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +151,7 @@ public class ProfileViewActivity extends AppCompatActivity {
                     mapToSend.put("age", Integer.valueOf(edtAge.getText().toString().trim()));
                     mapToSend.put("cnp", edtCNP.getText().toString().trim());
                     mapToSend.put("address", edtAddress.getText().toString().trim());
-                    mapToSend.put("photoUrl", p.getPhoto());
+                    mapToSend.put("photoUrl", p.getPhotoUrl());
                     APICommunication.putPacient(mapToSend, ProfileViewActivity.this);
                 }
             }
@@ -177,27 +172,27 @@ public class ProfileViewActivity extends AppCompatActivity {
     private void actualizeazaPacientCurent(Map<String, Object> map) {
         p.setFirstName((String) map.get("firstName"));
         p.setLastName((String) map.get("lastName"));
-        p.setVarsta((Integer) map.get("age"));
+        p.setAge((Integer) map.get("age"));
         p.setCNP((String) map.get("cnp"));
-        p.setAdresa((String) map.get("address"));
-        p.setPhoto((String) map.get("photo"));
+        p.setAddress((String) map.get("address"));
+        p.setPhotoUrl((String) map.get("photo"));
     }
 
     private void incarcaDate() {
         if (p != null) {
-            Glide.with(this).asBitmap().load(p.getPhoto()).into(imgProfile);
+            Glide.with(this).asBitmap().load(p.getPhotoUrl()).into(imgProfile);
             tvName.setText(p.getFirstName() + " " + p.getLastName());
             tvEmail.setText(p.getEmail());
             tvCNP.setText(p.getCNP());
-            tvAddress.setText(p.getAdresa());
-            tvAge.setText(String.valueOf(p.getVarsta()));
+            tvAddress.setText(p.getAddress());
+            tvAge.setText(String.valueOf(p.getAge()));
 
             edtFName.setText(p.getFirstName());
             edtLName.setText(p.getLastName());
             edtCNP.setText(p.getCNP());
 //            Toast.makeText(this, p.getVarsta(), Toast.LENGTH_SHORT).show();
-            edtAge.setText(String.valueOf(p.getVarsta()));
-            edtAddress.setText(p.getAdresa());
+            edtAge.setText(String.valueOf(p.getAge()));
+            edtAddress.setText(p.getAddress());
         }
     }
 

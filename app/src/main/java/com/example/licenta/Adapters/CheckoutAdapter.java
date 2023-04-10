@@ -34,7 +34,7 @@ public class CheckoutAdapter extends ArrayAdapter<Investigation> {
         Investigation investigation = getItem(position);
 
         txtInvestigationNameCheckout.setText(investigation.getName());
-        txtInvestigationSpecialtyCheckout.setText(investigation.getSpecialty().getTip().toString());
+        txtInvestigationSpecialtyCheckout.setText(investigation.getSpecialty().getType().toString());
         txtInvestigationPriceCheckout.setText(String.valueOf(investigation.getPrice())+" Ron");
 
         return convertView;

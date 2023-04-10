@@ -2,7 +2,6 @@ package com.example.licenta.Utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -20,28 +19,21 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.licenta.Models.Investigation;
 import com.example.licenta.Models.Order;
-import com.example.licenta.Models.Pacient;
-import com.example.licenta.Models.Programare;
+import com.example.licenta.Models.Patient;
+import com.example.licenta.Models.Appointment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
-import java.util.Base64;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -59,7 +51,7 @@ public class APICommunicationV2 {
     //        private final static String APIURL = "http://172.20.10.3:8080/api";
     private static StorageReference storageReference;
 
-    public static void uploadPictureFirebase(Uri image, Context ctx, Pacient pacient) {
+    public static void uploadPictureFirebase(Uri image, Context ctx, Patient pacient) {
 
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd_MM_yyyy_HH_mm_ss", Locale.getDefault());
         Date now = new Date();
@@ -74,7 +66,7 @@ public class APICommunicationV2 {
                 Toast.makeText(ctx, "Succesfully uploaded!", Toast.LENGTH_LONG).show();
                 sendIntent("finishedUploadingPicture", true, ctx);
                 storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
-                    pacient.setPhoto(uri.toString());
+                    pacient.setPhotoUrl(uri.toString());
                     Log.i("url out", uri.toString());
                 });
             }
@@ -89,7 +81,7 @@ public class APICommunicationV2 {
 
 
     //MODIFIED
-    public static void postPatient(Pacient pacient, Context ctx) {
+    public static void postPatient(Patient pacient, Context ctx) {
         JSONObject obj4Send = new JSONObject();
         try {
             obj4Send.put("id", pacient.getId());
@@ -97,8 +89,8 @@ public class APICommunicationV2 {
             obj4Send.put("lastName", pacient.getLastName());
             obj4Send.put("email", pacient.getEmail());
             obj4Send.put("cnp", pacient.getCNP());
-            obj4Send.put("age", pacient.getVarsta());
-            obj4Send.put("address", pacient.getAdresa());
+            obj4Send.put("age", pacient.getAge());
+            obj4Send.put("address", pacient.getAddress());
             RequestQueue queue = Volley.newRequestQueue(ctx);
             JsonObjectRequest jsReq = new JsonObjectRequest(Request.Method.POST,
                     APIURL + "/patients",
@@ -145,13 +137,13 @@ public class APICommunicationV2 {
     }
 
     //MODIFIED
-    public static void postAppointment(Programare prog, Pacient pac, Context ctx) {
+    public static void postAppointment(Appointment prog, Patient pac, Context ctx) {
         JSONObject obj4Send = new JSONObject();
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                obj4Send.put("date", prog.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+                obj4Send.put("date", prog.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
             }
-            obj4Send.put("comments", prog.getObservatii());
+            obj4Send.put("comments", prog.getComments());
             obj4Send.put("medic", prog.getMedic());
             RequestQueue queue = Volley.newRequestQueue(ctx);
             JsonObjectRequest jsReq = new JsonObjectRequest(Request.Method.POST,
@@ -179,7 +171,7 @@ public class APICommunicationV2 {
     }
 
     //MODIFIED
-    public static void deleteAppointment(Programare prog, String pacId, Context ctx) {
+    public static void deleteAppointment(Appointment prog, String pacId, Context ctx) {
         RequestQueue queue = Volley.newRequestQueue(ctx);
         JsonObjectRequest jsReq = new JsonObjectRequest(Request.Method.DELETE,
                 APIURL + "/appointments/" + prog.getId(),
@@ -202,12 +194,12 @@ public class APICommunicationV2 {
     }
 
 
-    public static void pingProgramare(Programare prog, Pacient pac, Context ctx) {
+    public static void pingProgramare(Appointment prog, Patient pac, Context ctx) {
         RequestQueue queue = Volley.newRequestQueue(ctx);
         JsonObjectRequest jsReq = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             jsReq = new JsonObjectRequest(Request.Method.GET,
-                    APIURL + "/findProgramareByUID?data=" + prog.getData().format(DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm")) + "&idMedic=" + prog.getMedic().getId(),
+                    APIURL + "/findProgramareByUID?data=" + prog.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm")) + "&idMedic=" + prog.getMedic().getId(),
                     null,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -233,7 +225,7 @@ public class APICommunicationV2 {
 
     //MODIFIED
     public static void getPacient(String id, Context ctx) {
-        Pacient p = null;
+        Patient p = null;
         RequestQueue queue = Volley.newRequestQueue(ctx);
         JsonObjectRequest jsReq = new JsonObjectRequest(Request.Method.GET,
                 APIURL + "/patients/" + id,
@@ -319,7 +311,7 @@ public class APICommunicationV2 {
     }
 
     //MODIFIED
-    public static void postOrder(Context ctx, Pacient pac, List<Investigation> investigations) {
+    public static void postOrder(Context ctx, Patient pac, List<Investigation> investigations) {
         JSONObject obj4Send = new JSONObject();
         Order order = new Order();
         order.setInvestigations(investigations);
@@ -346,7 +338,7 @@ public class APICommunicationV2 {
     }
 
     //MODIFIED
-    public static void getOrders(Context ctx, Pacient pac) {
+    public static void getOrders(Context ctx, Patient pac) {
         RequestQueue queue = Volley.newRequestQueue(ctx);
         JsonArrayRequest jsReq = new JsonArrayRequest(Request.Method.GET,
                 APIURL + "/orders?idPac=" + pac.getId(),

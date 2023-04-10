@@ -1,46 +1,43 @@
 package com.example.licenta.Models;
 
-import java.util.ArrayList;
-import java.util.List;
+public class Medic extends Person {
 
-public class Medic extends Persoana{
+    private Specialty specialty;
 
-    private Specialitate specialitate;
-
-    private Integer vechime;
+    private Integer seniority;
 
     private Float rating;
 
     public Medic() {
     }
 
-    public Medic(String id, String firstName, String lastName, String email, String CNP, Integer varsta, String adresa, Specialitate specialitate, Integer vechime, Float rating) {
+    public Medic(String id, String firstName, String lastName, String email, String CNP, Integer varsta, String adresa, Specialty specialitate, Integer vechime, Float rating) {
         super(id, firstName, lastName, email, CNP, varsta, adresa);
-        this.specialitate = specialitate;
-        this.vechime = vechime;
+        this.specialty = specialitate;
+        this.seniority = vechime;
         this.rating = rating;
     }
 
     public Medic(String id, String firstName, String lastName, String email, String CNP, Integer varsta, String adresa, Integer vechime, Float rating) {
         super(id, firstName, lastName, email, CNP, varsta, adresa);
-        this.vechime = vechime;
+        this.seniority = vechime;
         this.rating = rating;
     }
 
-    public Specialitate getSpecialitate() {
-        return specialitate;
+    public Specialty getSpecialty() {
+        return specialty;
     }
 
-    public void setSpecialitate(Specialitate specialitate) {
-        this.specialitate = specialitate;
+    public void setSpecialty(Specialty specialty) {
+        this.specialty = specialty;
     }
 
-    public Integer getVechime() {
-        return vechime;
+    public Integer getSeniority() {
+        return seniority;
     }
 
-    public void setVechime(Integer vechime) {
-        this.vechime = vechime;
+    public void setSeniority(Integer seniority) {
+        this.seniority = seniority;
     }
 
     public Float getRating() {
@@ -54,8 +51,8 @@ public class Medic extends Persoana{
     @Override
     public String toString() {
         return super.toString()+"Medic{" +
-                "specialitate=" + specialitate +
-                ", vechime=" + vechime +
+                "specialitate=" + specialty +
+                ", vechime=" + seniority +
                 ", rating=" + rating +
                 '}';
     }

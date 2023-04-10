@@ -53,10 +53,10 @@ public class MedicAdapter extends RecyclerView.Adapter<MedicAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Glide.with(ctx)
                 .asBitmap()
-                .load(medici.get(position).getPhoto())
+                .load(medici.get(position).getPhotoUrl())
                 .into(holder.imgMedicProfile);
         holder.txtMedicName.setText("Dr. "+medici.get(position).getFirstName() + " " + medici.get(position).getLastName());
-        String spec = medici.get(position).getSpecialitate().getTip().toString();
+        String spec = medici.get(position).getSpecialty().getType().toString();
         holder.txtMedicSpec.setText(spec.substring(0,1).toUpperCase() + spec.substring(1));
 //        holder.txtMedicSpec.setText(medici.get(position).getSpecialitati().get(0).getTip().toString().toUpperCase());
         holder.txtMedicRating.setText("⭐"+medici.get(position).getRating().toString());

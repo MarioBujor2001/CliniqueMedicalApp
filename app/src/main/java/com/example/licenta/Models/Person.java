@@ -2,7 +2,7 @@ package com.example.licenta.Models;
 
 import java.io.Serializable;
 
-public abstract class Persoana implements Serializable {
+public abstract class Person implements Serializable {
 
     private String id;
 
@@ -14,42 +14,42 @@ public abstract class Persoana implements Serializable {
 
     private String CNP;
 
-    private Integer varsta;
+    private Integer age;
 
-    private String adresa;
+    private String address;
 
-    private String photo;
+    private String photoUrl;
 
-    public Persoana() {
+    public Person() {
     }
 
-    public Persoana(String id, String firstName, String lastName, String email, String CNP, Integer varsta, String adresa, String photo) {
+    public Person(String id, String firstName, String lastName, String email, String CNP, Integer varsta, String adresa, String photoUrl) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.CNP = CNP;
-        this.varsta = varsta;
-        this.adresa = adresa;
-        this.photo = photo;
+        this.age = varsta;
+        this.address = adresa;
+        this.photoUrl = photoUrl;
     }
 
-    public Persoana(String id, String firstName, String lastName, String email, String CNP, Integer varsta, String adresa) {
+    public Person(String id, String firstName, String lastName, String email, String CNP, Integer varsta, String adresa) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.CNP = CNP;
-        this.varsta = varsta;
-        this.adresa = adresa;
+        this.age = varsta;
+        this.address = adresa;
     }
 
-    public String getPhoto() {
-        return photo;
+    public String getPhotoUrl() {
+        return photoUrl;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public String getId() {
@@ -92,20 +92,20 @@ public abstract class Persoana implements Serializable {
         this.CNP = CNP;
     }
 
-    public Integer getVarsta() {
-        return varsta;
+    public Integer getAge() {
+        return age;
     }
 
-    public void setVarsta(Integer varsta) {
-        this.varsta = varsta;
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
-    public String getAdresa() {
-        return adresa;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdresa(String adresa) {
-        this.adresa = adresa;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     @Override
@@ -116,8 +116,8 @@ public abstract class Persoana implements Serializable {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", CNP='" + CNP + '\'' +
-                ", varsta=" + varsta +
-                ", adresa='" + adresa + '\'' +
+                ", varsta=" + age +
+                ", adresa='" + address + '\'' +
                 '}';
     }
 }

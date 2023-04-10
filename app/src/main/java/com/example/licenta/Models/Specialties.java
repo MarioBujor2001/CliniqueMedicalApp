@@ -1,6 +1,6 @@
 package com.example.licenta.Models;
 
-public enum Specialitati {
+public enum Specialties {
     orl,
     alergologie,
     cardiologie,

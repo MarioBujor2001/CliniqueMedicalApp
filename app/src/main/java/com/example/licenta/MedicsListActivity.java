@@ -17,8 +17,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -30,13 +28,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.licenta.Adapters.InvestigationAdapter;
 import com.example.licenta.Adapters.MedicAdapter;
 import com.example.licenta.Models.Medic;
-import com.example.licenta.Models.Pacient;
-import com.example.licenta.Models.Programare;
-import com.example.licenta.Models.Specialitate;
-import com.example.licenta.Models.Specialitati;
+import com.example.licenta.Models.Patient;
+import com.example.licenta.Models.Appointment;
+import com.example.licenta.Models.Specialty;
+import com.example.licenta.Models.Specialties;
 import com.example.licenta.Utils.APICommunication;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 
@@ -58,7 +55,7 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
     private EditText searchDoctor;
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
-    private Pacient p;
+    private Patient p;
     private MaterialButtonToggleGroup toggleGroup;
     private boolean nameSearchCriteria = true;
     private Button btnProgrameaza;
@@ -141,7 +138,7 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medics_list);
-        p = (Pacient) getIntent().getSerializableExtra("pacient");
+        p = (Patient) getIntent().getSerializableExtra("pacient");
         recvMedici = findViewById(R.id.recvMedics);
         searchDoctor = findViewById(R.id.searchForDoctorName);
         toggleGroup = findViewById(R.id.toggleMedicList);
@@ -181,7 +178,7 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
                         adapter.setMedici(filteredMedici);
                     }else{
                         filteredMedici = (ArrayList<Medic>) medici.stream()
-                                .filter(medic -> (medic.getSpecialitate().toString()).contains(s.toString().toLowerCase()))
+                                .filter(medic -> (medic.getSpecialty().toString()).contains(s.toString().toLowerCase()))
                                 .collect(Collectors.toList());
                         adapter.setMedici(filteredMedici);
                     }
@@ -209,16 +206,16 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
                 m.setFirstName(currentMedic.getString("firstName"));
                 m.setLastName(currentMedic.getString("lastName"));
                 m.setEmail(currentMedic.getString("email"));
-                m.setVarsta(currentMedic.getInt("varsta"));
-                m.setAdresa(currentMedic.getString("adresa"));
-                m.setPhoto(currentMedic.getString("photo"));
+                m.setAge(currentMedic.getInt("varsta"));
+                m.setAddress(currentMedic.getString("adresa"));
+                m.setPhotoUrl(currentMedic.getString("photo"));
                 m.setCNP(currentMedic.getString("cnp"));
                 m.setRating((float) currentMedic.getDouble("rating"));
-                m.setVechime(currentMedic.getInt("vechime"));
+                m.setSeniority(currentMedic.getInt("vechime"));
 
                 try {
                     JSONObject specObj = (JSONObject) currentMedic.get("specialitate");
-                    m.setSpecialitate(new Specialitate(Specialitati.valueOf(specObj.getString("tip")), specObj.getString("descriere")));
+                    m.setSpecialty(new Specialty(Specialties.valueOf(specObj.getString("tip")), specObj.getString("descriere")));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -340,8 +337,8 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
                 setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
-    private Programare initProgramare(int position, boolean filtered, String data, String ora, String observatii) {
-        Programare prog = new Programare();
+    private Appointment initProgramare(int position, boolean filtered, String data, String ora, String observatii) {
+        Appointment prog = new Appointment();
         Medic m;
         if (filtered) {
             m = filteredMedici.get(position);
@@ -349,13 +346,13 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
             m = medici.get(position);
         }
         prog.setMedic(m);
-        prog.setPacient(p);
+        prog.setPatient(p);
         if(!observatii.equals("")){
-            prog.setObservatii(observatii);
+            prog.setComments(observatii);
         }
         String dataOra = data.substring(6) + " " + ora.substring(5);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            prog.setData(LocalDateTime.parse(dataOra, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            prog.setDate(LocalDateTime.parse(dataOra, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
         }
         return prog;
     }

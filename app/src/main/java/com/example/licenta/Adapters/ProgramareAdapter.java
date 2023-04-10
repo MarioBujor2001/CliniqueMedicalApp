@@ -2,7 +2,6 @@ package com.example.licenta.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,27 +16,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.licenta.Models.Medic;
-import com.example.licenta.Models.Programare;
+import com.example.licenta.Models.Appointment;
 import com.example.licenta.R;
-import com.example.licenta.RecyclerViewInterface;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class ProgramareAdapter extends RecyclerView.Adapter<ProgramareAdapter.ViewHolder> {
 
-    private ArrayList<Programare> programari = new ArrayList<>();
+    private ArrayList<Appointment> programari = new ArrayList<>();
     private Context ctx;
 
     public ProgramareAdapter(Context ctx) {
         this.ctx = ctx;
     }
 
-    public ArrayList<Programare> getProgramari() {
+    public ArrayList<Appointment> getProgramari() {
         return programari;
     }
 
-    public void setProgramari(ArrayList<Programare> programari) {
+    public void setProgramari(ArrayList<Appointment> programari) {
         this.programari = programari;
         notifyDataSetChanged();
     }
@@ -54,15 +52,15 @@ public class ProgramareAdapter extends RecyclerView.Adapter<ProgramareAdapter.Vi
         Medic medic = programari.get(position).getMedic();
         Glide.with(ctx)
                 .asBitmap()
-                .load(medic.getPhoto())
+                .load(medic.getPhotoUrl())
                 .into(holder.imgMedicProfile);
         holder.txtMedicName.setText("Dr. "+medic.getFirstName() + " " + medic.getLastName());
-        String spec = medic.getSpecialitate().getTip().toString();
+        String spec = medic.getSpecialty().getType().toString();
         holder.txtMedicSpec.setText(spec.substring(0,1).toUpperCase() + spec.substring(1));
 //        holder.txtMedicSpec.setText(medici.get(position).getSpecialitati().get(0).getTip().toString().toUpperCase());
         holder.txtMedicRating.setText("⭐"+medic.getRating().toString());
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            String dateFormated = programari.get(position).getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+            String dateFormated = programari.get(position).getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
             holder.txtData.setText(dateFormated.substring(0,10));
             holder.txtOra.setText(dateFormated.substring(11));
         }

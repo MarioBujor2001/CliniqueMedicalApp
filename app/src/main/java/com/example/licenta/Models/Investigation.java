@@ -6,10 +6,10 @@ public class Investigation implements Serializable {
     private Integer id;
     private String name;
     private float price;
-    private Specialitate specialty;
+    private Specialty specialty;
     private String description;
 
-    public Investigation(Integer id, String name, float price, Specialitate specialty, String description) {
+    public Investigation(Integer id, String name, float price, Specialty specialty, String description) {
         this.name = name;
         this.price = price;
         this.specialty = specialty;
@@ -35,11 +35,11 @@ public class Investigation implements Serializable {
         this.price = price;
     }
 
-    public Specialitate getSpecialty() {
+    public Specialty getSpecialty() {
         return specialty;
     }
 
-    public void setSpecialty(Specialitate specialty) {
+    public void setSpecialty(Specialty specialty) {
         this.specialty = specialty;
     }
 

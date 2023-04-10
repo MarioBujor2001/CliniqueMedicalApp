@@ -9,10 +9,9 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.licenta.Models.Pacient;
+import com.example.licenta.Models.Patient;
 import com.example.licenta.Utils.APICommunication;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -54,7 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         assert user != null;
                                         user.sendEmailVerification();
                                         Toast.makeText(RegisterActivity.this, "Check email for verification!"+user.getUid(), Toast.LENGTH_SHORT).show();
-                                        APICommunication.postPacient(new Pacient(user.getUid(),
+                                        APICommunication.postPacient(new Patient(user.getUid(),
                                                 edtFirstName.getText().toString(),
                                                 edtLastName.getText().toString(),
                                                 edtEmail.getText().toString(),

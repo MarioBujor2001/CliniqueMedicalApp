@@ -3,26 +3,26 @@ package com.example.licenta.Models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pacient extends Persoana{
+public class Patient extends Person {
 
     private Integer grad_urgenta;
 
-    private List<Programare> programari = new ArrayList<>();
+    private List<Appointment> appointments = new ArrayList<>();
 
-    public Pacient() {
+    public Patient() {
     }
 
-    public Pacient(String id, String firstName, String lastName, String email, String CNP, Integer varsta, String adresa, Integer grad_urgenta) {
+    public Patient(String id, String firstName, String lastName, String email, String CNP, Integer varsta, String adresa, Integer grad_urgenta) {
         super(id, firstName, lastName, email, CNP, varsta, adresa);
         this.grad_urgenta = grad_urgenta;
     }
 
-    public List<Programare> getProgramari() {
-        return programari;
+    public List<Appointment> getAppointments() {
+        return appointments;
     }
 
-    public void setProgramari(List<Programare> programari) {
-        this.programari = programari;
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
     }
 
     public Integer getGrad_urgenta() {

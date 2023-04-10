@@ -4,13 +4,10 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,14 +19,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Build;
@@ -37,9 +30,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,9 +38,9 @@ import com.example.licenta.Adapters.InvestigationAdapter;
 import com.example.licenta.Adapters.OrdersAdapter;
 import com.example.licenta.Models.Investigation;
 import com.example.licenta.Models.Order;
-import com.example.licenta.Models.Pacient;
-import com.example.licenta.Models.Specialitate;
-import com.example.licenta.Models.Specialitati;
+import com.example.licenta.Models.Patient;
+import com.example.licenta.Models.Specialty;
+import com.example.licenta.Models.Specialties;
 import com.example.licenta.Utils.APICommunication;
 
 import org.json.JSONArray;
@@ -57,11 +48,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -73,7 +61,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
     private RecyclerView recvOrders;
     private OrdersAdapter adapter;
     private List<Order> orderList;
-    private Pacient pacient;
+    private Patient pacient;
     private ProgressDialog progressDialog;
 
     //forPopup
@@ -146,7 +134,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        pacient = (Pacient) getIntent().getSerializableExtra("pacient");
+        pacient = (Patient) getIntent().getSerializableExtra("pacient");
         LocalBroadcastManager.getInstance(this).registerReceiver(receiveOrders, new IntentFilter("apiMessageOrdersReceived"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiveMoreInfoOrder, new IntentFilter("receiveMoreInfoOrder"));
         if (pacient != null) {
@@ -188,7 +176,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
                     Log.i("to check invest", investigation.toString());
                     try {
                         JSONObject specObj = (JSONObject) currentInvestigation.get("specialitate");
-                        investigation.setSpecialty(new Specialitate(Specialitati.valueOf(specObj.getString("tip")), specObj.getString("descriere")));
+                        investigation.setSpecialty(new Specialty(Specialties.valueOf(specObj.getString("tip")), specObj.getString("descriere")));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
