@@ -42,6 +42,7 @@ import com.example.licenta.Models.Patient;
 import com.example.licenta.Models.Specialty;
 import com.example.licenta.Models.Specialties;
 import com.example.licenta.Utils.APICommunication;
+import com.example.licenta.Utils.APICommunicationV2;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -138,7 +139,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(receiveOrders, new IntentFilter("apiMessageOrdersReceived"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiveMoreInfoOrder, new IntentFilter("receiveMoreInfoOrder"));
         if (pacient != null) {
-            APICommunication.getOrders(getApplicationContext(), pacient);
+            APICommunicationV2.getOrders(getApplicationContext(), pacient);
         }
         createLoadingDialog();
     }
@@ -157,12 +158,12 @@ public class OrderHistoryActivity extends AppCompatActivity {
     public void loadOrders() {
         try {
             orderList = new ArrayList<>();
-            for (int i = 0; i < APICommunication.ordersArray.length(); i++) {
-                JSONObject currentOrder = APICommunication.ordersArray.getJSONObject(i);
+            for (int i = 0; i < APICommunicationV2.ordersArray.length(); i++) {
+                JSONObject currentOrder = APICommunicationV2.ordersArray.getJSONObject(i);
                 Order order = new Order();
                 order.setId(Integer.valueOf(currentOrder.getString("id")));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    order.setData(LocalDateTime.parse(currentOrder.getString("data"),
+                    order.setData(LocalDateTime.parse(currentOrder.getString("date"),
                             DateTimeFormatter.ISO_DATE_TIME));
                 }
                 JSONArray investigationsArray = currentOrder.getJSONArray("investigations");
@@ -171,12 +172,12 @@ public class OrderHistoryActivity extends AppCompatActivity {
                     JSONObject currentInvestigation = investigationsArray.getJSONObject(j);
                     Investigation investigation = new Investigation();
                     investigation.setId(currentInvestigation.getInt("id"));
-                    investigation.setName(currentInvestigation.getString("nume"));
-                    investigation.setPrice(((Double) currentInvestigation.get("pret")).floatValue());
+                    investigation.setName(currentInvestigation.getString("name"));
+                    investigation.setPrice(((Double) currentInvestigation.get("price")).floatValue());
                     Log.i("to check invest", investigation.toString());
                     try {
-                        JSONObject specObj = (JSONObject) currentInvestigation.get("specialitate");
-                        investigation.setSpecialty(new Specialty(Specialties.valueOf(specObj.getString("tip")), specObj.getString("descriere")));
+                        JSONObject specObj = (JSONObject) currentInvestigation.get("specialty");
+                        investigation.setSpecialty(new Specialty(Specialties.valueOf(specObj.getString("type")), specObj.getString("description")));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

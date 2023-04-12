@@ -35,6 +35,7 @@ import com.example.licenta.Models.Appointment;
 import com.example.licenta.Models.Specialty;
 import com.example.licenta.Models.Specialties;
 import com.example.licenta.Utils.APICommunication;
+import com.example.licenta.Utils.APICommunicationV2;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import org.json.JSONException;
@@ -77,7 +78,7 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
         public void onReceive(Context context, Intent intent) {
             boolean isSucces = intent.getBooleanExtra("success", false);
             if(isSucces){
-                if (!APICommunication.invalidAppointment) {
+                if (!APICommunicationV2.invalidAppointment) {
                     btnProgrameaza.setEnabled(true);
                     Toast.makeText(MedicsListActivity.this, "This date is available", Toast.LENGTH_SHORT).show();
                 }else{
@@ -125,8 +126,8 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
         LocalBroadcastManager.getInstance(this).registerReceiver(receiveAvailableReservation, new IntentFilter("apiMessageReservation"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiveSuccessReservation, new IntentFilter("apiMessageSuccessReservation"));
         createLoadingDialog();
-        if(APICommunication.mediciArray==null){
-            APICommunication.getMedics(getApplicationContext());
+        if(APICommunicationV2.mediciArray==null){
+            APICommunicationV2.getMedics(getApplicationContext());
         }else{
             loadMedics();
             reloadMedicsAdapter();
@@ -199,23 +200,23 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
     private void loadMedics() {
         try {
             medici = new ArrayList<>();
-            for (int i = 0; i < APICommunication.mediciArray.length(); i++) {
-                JSONObject currentMedic = APICommunication.mediciArray.getJSONObject(i);
+            for (int i = 0; i < APICommunicationV2.mediciArray.length(); i++) {
+                JSONObject currentMedic = APICommunicationV2.mediciArray.getJSONObject(i);
                 Medic m = new Medic();
                 m.setId(currentMedic.getString("id"));
                 m.setFirstName(currentMedic.getString("firstName"));
                 m.setLastName(currentMedic.getString("lastName"));
                 m.setEmail(currentMedic.getString("email"));
-                m.setAge(currentMedic.getInt("varsta"));
-                m.setAddress(currentMedic.getString("adresa"));
-                m.setPhotoUrl(currentMedic.getString("photo"));
+                m.setAge(currentMedic.getInt("age"));
+                m.setAddress(currentMedic.getString("address"));
+                m.setPhotoUrl(currentMedic.getString("photoUrl"));
                 m.setCNP(currentMedic.getString("cnp"));
                 m.setRating((float) currentMedic.getDouble("rating"));
-                m.setSeniority(currentMedic.getInt("vechime"));
+                m.setSeniority(currentMedic.getInt("seniority"));
 
                 try {
-                    JSONObject specObj = (JSONObject) currentMedic.get("specialitate");
-                    m.setSpecialty(new Specialty(Specialties.valueOf(specObj.getString("tip")), specObj.getString("descriere")));
+                    JSONObject specObj = (JSONObject) currentMedic.get("specialty");
+                    m.setSpecialty(new Specialty(Specialties.valueOf(specObj.getString("type")), specObj.getString("description")));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -311,7 +312,7 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
         btnVerifDisp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                APICommunication.pingProgramare(initProgramare(position, filtered,
+                APICommunicationV2.pingProgramare(initProgramare(position, filtered,
                                 tvData.getText().toString(),
                                 tvOra.getText().toString(),
                                 edtMotivVizita.getText().toString()),
@@ -322,7 +323,7 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
         btnProgrameaza.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                APICommunication.postProgramare(initProgramare(position, filtered,
+                APICommunicationV2.postAppointment(initProgramare(position, filtered,
                                 tvData.getText().toString(),
                                 tvOra.getText().toString(),
                                 edtMotivVizita.getText().toString()),

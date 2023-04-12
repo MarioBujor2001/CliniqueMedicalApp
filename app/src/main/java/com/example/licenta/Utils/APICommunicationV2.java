@@ -47,7 +47,7 @@ public class APICommunicationV2 {
     public static JSONArray forumPostsArray;
     public static String encodedImage;
     public static boolean invalidAppointment = false;
-    private final static String APIURL = "http://192.168.100.75:8080/api";
+    private final static String APIURL = "http://192.168.100.75:8080";
     //        private final static String APIURL = "http://172.20.10.3:8080/api";
     private static StorageReference storageReference;
 
@@ -141,10 +141,12 @@ public class APICommunicationV2 {
         JSONObject obj4Send = new JSONObject();
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                obj4Send.put("date", prog.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+                obj4Send.put("date", prog.getDate());
             }
             obj4Send.put("comments", prog.getComments());
-            obj4Send.put("medic", prog.getMedic());
+            JSONObject medic4Send = new JSONObject();
+            medic4Send.put("id",prog.getMedic().getId());
+            obj4Send.put("medic", medic4Send);
             RequestQueue queue = Volley.newRequestQueue(ctx);
             JsonObjectRequest jsReq = new JsonObjectRequest(Request.Method.POST,
                     APIURL + "/patients/" + pac.getId() + "/appointments",
@@ -180,7 +182,7 @@ public class APICommunicationV2 {
                     @Override
                     public void onResponse(JSONObject response) {
                         if (pacId != null) {
-                            APICommunication.getAppointments(pacId, ctx);
+                            APICommunicationV2.getAppointments(pacId, ctx);
                         }
                     }
                 },
@@ -199,7 +201,7 @@ public class APICommunicationV2 {
         JsonObjectRequest jsReq = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             jsReq = new JsonObjectRequest(Request.Method.GET,
-                    APIURL + "/findProgramareByUID?data=" + prog.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm")) + "&idMedic=" + prog.getMedic().getId(),
+                    APIURL + "/appointments?date=" + prog.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm")) + "&idMedic=" + prog.getMedic().getId(),
                     null,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -313,8 +315,18 @@ public class APICommunicationV2 {
     //MODIFIED
     public static void postOrder(Context ctx, Patient pac, List<Investigation> investigations) {
         JSONObject obj4Send = new JSONObject();
-        Order order = new Order();
-        order.setInvestigations(investigations);
+        JSONArray array = new JSONArray();
+        try{
+            for(int i=0;i<investigations.size();i++){
+                JSONObject obj = new JSONObject();
+                obj.put("id",investigations.get(i).getId());
+                array.put(i, obj);
+            }
+            obj4Send.put("investigations", array);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        Log.i("invest", obj4Send.toString());
         RequestQueue queue = Volley.newRequestQueue(ctx);
         JsonObjectRequest jsReq = new JsonObjectRequest(Request.Method.POST,
                 APIURL + "/patients/" + pac.getId() + "/orders",

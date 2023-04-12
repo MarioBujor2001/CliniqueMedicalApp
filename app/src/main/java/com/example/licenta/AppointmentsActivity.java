@@ -22,6 +22,7 @@ import com.example.licenta.Models.Appointment;
 import com.example.licenta.Models.Specialty;
 import com.example.licenta.Models.Specialties;
 import com.example.licenta.Utils.APICommunication;
+import com.example.licenta.Utils.APICommunicationV2;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import org.json.JSONException;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ProgramariActivity extends AppCompatActivity {
+public class AppointmentsActivity extends AppCompatActivity {
     private RecyclerView recvAppointments;
     private ArrayList<Appointment> programari;
     private ProgramareAdapter adapter;
@@ -60,13 +61,13 @@ public class ProgramariActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             Appointment appointment = (Appointment) intent.getSerializableExtra("toDelete");
             if (appointment != null) {
-                APICommunication.deleteProgramare(appointment, p.getId(), getApplicationContext());
+                APICommunicationV2.deleteAppointment(appointment, p.getId(), getApplicationContext());
             }
         }
     };
 
     private void createLoadingDialog() {
-        progressDialog = new ProgressDialog(ProgramariActivity.this);
+        progressDialog = new ProgressDialog(AppointmentsActivity.this);
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -97,7 +98,7 @@ public class ProgramariActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(receiverAppointmentsDelete, new IntentFilter("progAdapterDelete"));
         createLoadingDialog();
         p = (Patient) getIntent().getSerializableExtra("pacient");
-        APICommunication.getAppointments(p.getId(), getApplicationContext());
+        APICommunicationV2.getAppointments(p.getId(), getApplicationContext());
     }
 
     @Override
@@ -139,16 +140,16 @@ public class ProgramariActivity extends AppCompatActivity {
     private void loadAppointments() {
         try {
             programari = new ArrayList<>();
-            for (int i = 0; i < APICommunication.appointmentsArray.length(); i++) {
+            for (int i = 0; i < APICommunicationV2.appointmentsArray.length(); i++) {
 //                setarea info programare
-                JSONObject currentApp = APICommunication.appointmentsArray.getJSONObject(i);
+                JSONObject currentApp = APICommunicationV2.appointmentsArray.getJSONObject(i);
                 Appointment prog = new Appointment();
                 prog.setId(currentApp.getInt("id"));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    prog.setDate(LocalDateTime.parse(currentApp.getString("data"),
+                    prog.setDate(LocalDateTime.parse(currentApp.getString("date"),
                             DateTimeFormatter.ISO_DATE_TIME));
                 }
-                prog.setComments(currentApp.getString("observatii"));
+                prog.setComments(currentApp.getString("comments"));
 
 //                setarea medicului programarii
                 JSONObject currentMedic = currentApp.getJSONObject("medic");
@@ -157,15 +158,15 @@ public class ProgramariActivity extends AppCompatActivity {
                 m.setFirstName(currentMedic.getString("firstName"));
                 m.setLastName(currentMedic.getString("lastName"));
                 m.setEmail(currentMedic.getString("email"));
-                m.setAge(currentMedic.getInt("varsta"));
-                m.setAddress(currentMedic.getString("adresa"));
-                m.setPhotoUrl(currentMedic.getString("photo"));
+                m.setAge(currentMedic.getInt("age"));
+                m.setAddress(currentMedic.getString("address"));
+                m.setPhotoUrl(currentMedic.getString("photoUrl"));
                 m.setCNP(currentMedic.getString("cnp"));
                 m.setRating((float) currentMedic.getDouble("rating"));
-                m.setSeniority(currentMedic.getInt("vechime"));
+                m.setSeniority(currentMedic.getInt("seniority"));
                 try {
-                    JSONObject specObj = (JSONObject) currentMedic.get("specialitate");
-                    m.setSpecialty(new Specialty(Specialties.valueOf(specObj.getString("tip")), specObj.getString("descriere")));
+                    JSONObject specObj = (JSONObject) currentMedic.get("specialty");
+                    m.setSpecialty(new Specialty(Specialties.valueOf(specObj.getString("type")), specObj.getString("description")));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

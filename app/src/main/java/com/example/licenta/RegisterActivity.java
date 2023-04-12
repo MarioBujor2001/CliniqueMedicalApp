@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.licenta.Models.Patient;
 import com.example.licenta.Utils.APICommunication;
+import com.example.licenta.Utils.APICommunicationV2;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -53,7 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         assert user != null;
                                         user.sendEmailVerification();
                                         Toast.makeText(RegisterActivity.this, "Check email for verification!"+user.getUid(), Toast.LENGTH_SHORT).show();
-                                        APICommunication.postPacient(new Patient(user.getUid(),
+                                        APICommunicationV2.postPatient(new Patient(user.getUid(),
                                                 edtFirstName.getText().toString(),
                                                 edtLastName.getText().toString(),
                                                 edtEmail.getText().toString(),

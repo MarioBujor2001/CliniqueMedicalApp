@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.licenta.Models.Patient;
 import com.example.licenta.Utils.APICommunication;
+import com.example.licenta.Utils.APICommunicationV2;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -152,7 +153,8 @@ public class ProfileViewActivity extends AppCompatActivity {
                     mapToSend.put("cnp", edtCNP.getText().toString().trim());
                     mapToSend.put("address", edtAddress.getText().toString().trim());
                     mapToSend.put("photoUrl", p.getPhotoUrl());
-                    APICommunication.putPacient(mapToSend, ProfileViewActivity.this);
+                    mapToSend.put("email", p.getEmail());
+                    APICommunicationV2.putPatient(mapToSend, ProfileViewActivity.this);
                 }
             }
         });
@@ -237,7 +239,7 @@ public class ProfileViewActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 assert data != null;
                 Uri selectedImage = data.getData();
-                APICommunication.uploadPictureFirebase(selectedImage, getApplicationContext(), p);
+                APICommunicationV2.uploadPictureFirebase(selectedImage, getApplicationContext(), p);
                 imgProfile.setImageURI(selectedImage);
                 //
 //                filePath = getPath(selectedImage);

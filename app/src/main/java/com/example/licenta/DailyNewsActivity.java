@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.example.licenta.Adapters.DailyNewsAdapter;
 import com.example.licenta.Models.ForumPost;
 import com.example.licenta.Utils.APICommunication;
+import com.example.licenta.Utils.APICommunicationV2;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,7 +84,7 @@ public class DailyNewsActivity extends AppCompatActivity {
                 new IntentFilter("apiMessageForumPostsReceived"));
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(showMoreInfoPostReceiver,
                 new IntentFilter("showMoreInfoPostReceiver"));
-        APICommunication.getForumPosts(getApplicationContext());
+        APICommunicationV2.getForumPosts(getApplicationContext());
     }
 
     public void reloadForumPostsAdapter() {
@@ -96,8 +97,8 @@ public class DailyNewsActivity extends AppCompatActivity {
     public void loadForumPosts() {
         try {
             news = new ArrayList<>();
-            for (int i = 0; i < APICommunication.forumPostsArray.length(); i++) {
-                JSONObject currentForumPost = APICommunication.forumPostsArray.getJSONObject(i);
+            for (int i = 0; i < APICommunicationV2.forumPostsArray.length(); i++) {
+                JSONObject currentForumPost = APICommunicationV2.forumPostsArray.getJSONObject(i);
                 ForumPost f = new ForumPost();
                 f.setId(currentForumPost.getInt("id"));
                 f.setContent(currentForumPost.getString("content"));

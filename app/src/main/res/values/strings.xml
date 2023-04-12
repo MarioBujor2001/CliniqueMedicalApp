@@ -66,7 +66,6 @@
     <string name="luckily_you_don_t_have_any_appointments">You don\'t have any appointments this week</string>
     <string name="orders">Orders</string>
     <string name="daily_news">Daily News</string>
-    <string name="speak_to_a_doctor">Speak to a doctor</string>
     <string name="comanda">Comanda:</string>
     <string name="orderno_placeholder">#1001</string>
     <string name="date_placeholder">dd-MM-yyyy HH:mm</string>
@@ -77,6 +76,20 @@
     <string name="daily_news_health_tips">Daily News - Health Tips</string>
     <string name="news_title_placeholder">News title placeholder</string>
     <string name="see_more">See more</string>
+    <string name="your_weight">Your weight:</string>
+    <string name="weight_hint">68kg</string>
+    <string name="your_height">Your height:</string>
+    <string name="height_hint">177cm</string>
+    <string name="your_gender">Your gender:</string>
+    <string name="male_rb_text">Male</string>
+    <string name="female_rb_text">Female</string>
+    <string name="activity_level">Activity level:</string>
+    <string name="obtain_body_analysis">Obtain body analysis!</string>
+    <string name="disclaimer_your_body_analysis_is_calculated_based_on_a_fixed_forumla_and_it_doesn_t_necessarily_reflect_your_well_being">
+        Disclaimer: Your body analysis is calculated based on a fixed forumla and it doesn\'t necessarily reflect your well being. Always discuss with your doctor before starting doing exercises or beginning a diet!
+    </string>
+    <string name="body_analysis">Body analysis</string>
+    <string name="body_analysis_main">Body Analysis</string>
     <string-array name="filterMedics">
         <item>orl</item>
         <item>alergologie</item>
@@ -95,5 +108,11 @@
         <item>pediatrie</item>
         <item>pneumologie</item>
         <item>urologie</item>
+    </string-array>
+    <string-array name="activityLevels">
+        <item>Sedentary: little to no exercise</item>
+        <item>Light: exercise 1–3 times/week</item>
+        <item>Moderate: exercise 4–5 times/week</item>
+        <item>Active: daily exercise</item>
     </string-array>
 </resources>

@@ -24,7 +24,7 @@ import com.example.licenta.Models.Patient;
 import com.example.licenta.Models.Appointment;
 import com.example.licenta.Models.Specialty;
 import com.example.licenta.Models.Specialties;
-import com.example.licenta.Utils.APICommunication;
+import com.example.licenta.Utils.APICommunicationV2;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -39,7 +39,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private TextView tvUserName, txtYouDontHaveAppointments;
     private FirebaseAuth mAuth;
-    private CardView allMedicsCard, viewProfile, allProgramari, aboutCard, investigationCard, ordersCard, newsCard;
+    private CardView allMedicsCard, viewProfile, allProgramari, aboutCard, investigationCard, ordersCard, newsCard, bodyAnalysisCard;
     private RecyclerView recvAppointments;
     private ImageView imgProfile;
     private ProgressDialog progressDialog;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             boolean isSucces = intent.getBooleanExtra("success", false);
             if(isSucces){
                 loadPersonalInfo(user.getUid());
-                APICommunication.getAppointments(user.getUid(), getApplicationContext());
+                APICommunicationV2.getAppointments(user.getUid(), getApplicationContext());
             }
         }
     };
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             cancelLoadingDialog();
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }else{
-            APICommunication.getPacient(user.getUid(),getApplicationContext());
+            APICommunicationV2.getPacient(user.getUid(),getApplicationContext());
         }
     }
 
@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         aboutCard = findViewById(R.id.aboutCliniqueCard);
         ordersCard = findViewById(R.id.ordersCard);
         newsCard = findViewById(R.id.newsCard);
+        bodyAnalysisCard = findViewById(R.id.bodyAnalysisCard);
         investigationCard = findViewById(R.id.investigationCard);
         imgProfile = findViewById(R.id.userProfile);
         viewProfile = findViewById(R.id.viewProfile);
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         });
         allProgramari.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, ProgramariActivity.class);
+            Intent i = new Intent(MainActivity.this, AppointmentsActivity.class);
             i.putExtra("pacient", p);
             startActivity(i);
         });
@@ -163,21 +164,26 @@ public class MainActivity extends AppCompatActivity {
         newsCard.setOnClickListener(view -> {
             startActivity(new Intent(MainActivity.this, DailyNewsActivity.class));
         });
+        bodyAnalysisCard.setOnClickListener(view -> {
+            Intent i = new Intent(MainActivity.this, BodyAnalysisActivity.class);
+            i.putExtra("pacient", p);
+            startActivity(i);
+        });
     }
 
     private void loadAppointments() {
         try{
             programari = new ArrayList<>();
-            for(int i=0;i<APICommunication.appointmentsArray.length();i++){
+            for(int i=0;i<APICommunicationV2.appointmentsArray.length();i++){
 //                setarea info programare
-                JSONObject currentApp = APICommunication.appointmentsArray.getJSONObject(i);
+                JSONObject currentApp = APICommunicationV2.appointmentsArray.getJSONObject(i);
                 Appointment prog = new Appointment();
                 prog.setId(currentApp.getInt("id"));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    prog.setDate(LocalDateTime.parse(currentApp.getString("data"),
+                    prog.setDate(LocalDateTime.parse(currentApp.getString("date"),
                             DateTimeFormatter.ISO_DATE_TIME));
                 }
-                prog.setComments(currentApp.getString("observatii"));
+                prog.setComments(currentApp.getString("comments"));
 
 //                setarea medicului programarii
                 JSONObject currentMedic = currentApp.getJSONObject("medic");
@@ -186,15 +192,15 @@ public class MainActivity extends AppCompatActivity {
                 m.setFirstName(currentMedic.getString("firstName"));
                 m.setLastName(currentMedic.getString("lastName"));
                 m.setEmail(currentMedic.getString("email"));
-                m.setAge(currentMedic.getInt("varsta"));
-                m.setAddress(currentMedic.getString("adresa"));
-                m.setPhotoUrl(currentMedic.getString("photo"));
+                m.setAge(currentMedic.getInt("age"));
+                m.setAddress(currentMedic.getString("address"));
+                m.setPhotoUrl(currentMedic.getString("photoUrl"));
                 m.setCNP(currentMedic.getString("cnp"));
                 m.setRating((float) currentMedic.getDouble("rating"));
-                m.setSeniority(currentMedic.getInt("vechime"));
+                m.setSeniority(currentMedic.getInt("seniority"));
                 try{
-                    JSONObject specObj = (JSONObject) currentMedic.get("specialitate");
-                    m.setSpecialty(new Specialty(Specialties.valueOf(specObj.getString("tip")), specObj.getString("descriere")));
+                    JSONObject specObj = (JSONObject) currentMedic.get("specialty");
+                    m.setSpecialty(new Specialty(Specialties.valueOf(specObj.getString("type")), specObj.getString("description")));
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -213,15 +219,15 @@ public class MainActivity extends AppCompatActivity {
     private void loadPersonalInfo(String id){
         p = new Patient();
         try {
-            p.setId(APICommunication.currentOBJ.getString("id"));
-            p.setFirstName(APICommunication.currentOBJ.getString("firstName"));
-            p.setLastName(APICommunication.currentOBJ.getString("lastName"));
-            p.setEmail(APICommunication.currentOBJ.getString("email"));
-            p.setAge(APICommunication.currentOBJ.getInt("varsta"));
-            p.setAddress(APICommunication.currentOBJ.getString("adresa"));
-            p.setPhotoUrl(APICommunication.currentOBJ.getString("photo"));
-            p.setGrad_urgenta(APICommunication.currentOBJ.getInt("grad_urgenta"));
-            p.setCNP(APICommunication.currentOBJ.getString("cnp"));
+            p.setId(APICommunicationV2.currentOBJ.getString("id"));
+            p.setFirstName(APICommunicationV2.currentOBJ.getString("firstName"));
+            p.setLastName(APICommunicationV2.currentOBJ.getString("lastName"));
+            p.setEmail(APICommunicationV2.currentOBJ.getString("email"));
+            p.setAge(APICommunicationV2.currentOBJ.getInt("age"));
+            p.setAddress(APICommunicationV2.currentOBJ.getString("address"));
+            p.setPhotoUrl(APICommunicationV2.currentOBJ.getString("photoUrl"));
+//            p.setGrad_urgenta(APICommunicationV2.currentOBJ.getInt("grad_urgenta"));
+            p.setCNP(APICommunicationV2.currentOBJ.getString("cnp"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -28,6 +28,7 @@ import com.example.licenta.Models.Patient;
 import com.example.licenta.Models.Specialty;
 import com.example.licenta.Models.Specialties;
 import com.example.licenta.Utils.APICommunication;
+import com.example.licenta.Utils.APICommunicationV2;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,16 +94,16 @@ public class InvestigationsActivity extends AppCompatActivity {
     private void loadInvestigations() {
         try {
             investigations = new ArrayList<>();
-            for (int i = 0; i < APICommunication.investigationsArray.length(); i++) {
-                JSONObject currentInvestigation = APICommunication.investigationsArray.getJSONObject(i);
+            for (int i = 0; i < APICommunicationV2.investigationsArray.length(); i++) {
+                JSONObject currentInvestigation = APICommunicationV2.investigationsArray.getJSONObject(i);
                 Investigation investigation = new Investigation();
                 investigation.setId(currentInvestigation.getInt("id"));
-                investigation.setName(currentInvestigation.getString("nume"));
-                investigation.setPrice(((Double) currentInvestigation.get("pret")).floatValue());
+                investigation.setName(currentInvestigation.getString("name"));
+                investigation.setPrice(((Double) currentInvestigation.get("price")).floatValue());
                 Log.i("to check invest", investigation.toString());
                 try {
-                    JSONObject specObj = (JSONObject) currentInvestigation.get("specialitate");
-                    investigation.setSpecialty(new Specialty(Specialties.valueOf(specObj.getString("tip")), specObj.getString("descriere")));
+                    JSONObject specObj = (JSONObject) currentInvestigation.get("specialty");
+                    investigation.setSpecialty(new Specialty(Specialties.valueOf(specObj.getString("type")), specObj.getString("description")));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -150,7 +151,7 @@ public class InvestigationsActivity extends AppCompatActivity {
         btnCheckout.setOnClickListener(view -> {
             if (!currentInvestigationsCart.isEmpty()) {
                 btnCheckout.setEnabled(false);
-                APICommunication.postOrder(getApplicationContext(), pacient, currentInvestigationsCart);
+                APICommunicationV2.postOrder(getApplicationContext(), pacient, currentInvestigationsCart);
             }
         });
 
@@ -168,9 +169,9 @@ public class InvestigationsActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(receivedInvestigationReceiver, new IntentFilter("apiMessageInvestigation"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receivedOrderInsertConfirmation, new IntentFilter("apiMessageOrderCreate"));
         createLoadingDialog();
-        if (APICommunication.investigationsArray == null) {
+        if (APICommunicationV2.investigationsArray == null) {
             //cerem date
-            APICommunication.getInvestigations(getApplicationContext());
+            APICommunicationV2.getInvestigations(getApplicationContext());
         } else {
             //doar reincarcam datele
             loadInvestigations();

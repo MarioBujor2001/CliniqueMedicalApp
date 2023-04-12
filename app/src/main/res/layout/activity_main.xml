@@ -469,9 +469,9 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-<!--         speak to a doctor card-->
+<!--         body analysis-->
             <androidx.cardview.widget.CardView
-                android:id="@+id/contactDoctorCard"
+                android:id="@+id/bodyAnalysisCard"
                 android:layout_width="0dp"
                 android:layout_height="75dp"
                 android:layout_marginTop="10dp"
@@ -488,10 +488,10 @@
 
                     <ImageView
                         android:id="@+id/imageViewContactDoctor"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:layout_marginTop="10dp"
-                        android:src="@drawable/support"
+                        android:src="@drawable/body"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -503,7 +503,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="@string/speak_to_a_doctor"
+                        android:text="@string/body_analysis_main"
                         android:textSize="10sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
