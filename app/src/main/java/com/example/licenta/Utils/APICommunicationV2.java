@@ -21,6 +21,7 @@ import com.example.licenta.Models.Investigation;
 import com.example.licenta.Models.Order;
 import com.example.licenta.Models.Patient;
 import com.example.licenta.Models.Appointment;
+import com.example.licenta.Models.dto.BodyAnalysisDTO;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -45,9 +46,11 @@ public class APICommunicationV2 {
     public static JSONArray investigationsArray;
     public static JSONArray ordersArray;
     public static JSONArray forumPostsArray;
+    public static JSONObject bodyAnalysis;
     public static String encodedImage;
     public static boolean invalidAppointment = false;
-    private final static String APIURL = "http://192.168.100.75:8080";
+//    private final static String APIURL = "http://192.168.100.75:8080";
+    private final static String APIURL = "http://192.168.0.109:8080";
     //        private final static String APIURL = "http://172.20.10.3:8080/api";
     private static StorageReference storageReference;
 
@@ -398,5 +401,60 @@ public class APICommunicationV2 {
         Intent intent = new Intent(action);
         intent.putExtra("success", isSuccessful);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    public static void addBodyAnalysis(Context ctx, String idPat, BodyAnalysisDTO body){
+        JSONObject obj4Send = new JSONObject();
+        try{
+            obj4Send.put("weight", body.getWeight());
+            obj4Send.put("height", body.getHeight());
+            obj4Send.put("gender", body.getGender().toString());
+            obj4Send.put("activityLevel", body.getActivityLevel().toString());
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        Log.i("body", obj4Send.toString());
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+        JsonObjectRequest jsReq = new JsonObjectRequest(Request.Method.PUT,
+                APIURL + "/patients/" + idPat + "/analysis",
+                obj4Send,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i("VolleyPostBody:", response.toString());
+                        getBodyAnalysis(ctx, idPat);
+                        sendIntent("apiMessageCreatedBodyAnalysis", true, ctx);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //va intra aici deoarece nu primi nimic inapoi
+                        Log.i("VolleyErrPostBody:", error.toString());
+                    }
+                });
+        queue.add(jsReq);
+    }
+
+    public static void getBodyAnalysis(Context ctx, String idPat){
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+        JsonObjectRequest jsReq = new JsonObjectRequest(Request.Method.GET,
+                APIURL + "/patients/"+idPat+"/analysis",
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        bodyAnalysis = response;
+                        sendIntent("apiMessageGetBodyAnalysis", true, ctx);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley:", error.toString());
+                        sendIntent("apiMessageGetBodyAnalysis", false, ctx);
+                    }
+                });
+        queue.add(jsReq);
     }
 }

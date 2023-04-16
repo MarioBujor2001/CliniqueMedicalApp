@@ -143,6 +143,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:fontFamily="@font/poppins_bold"
+                    android:checked="true"
                     android:text="@string/male_rb_text"
                     android:textColor="@color/black" />
 
@@ -169,6 +170,7 @@
                 app:layout_constraintTop_toBottomOf="@id/textView11" />
 
             <Spinner
+                android:id="@+id/spnActivityLevel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -178,7 +180,7 @@
                 android:entries="@array/activityLevels"/>
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/btnObtain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -199,7 +201,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button"
+                app:layout_constraintTop_toBottomOf="@+id/btnObtain"
                 app:layout_constraintVertical_bias="0.13999999" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -208,7 +210,7 @@
 
 <!--    POP UP CARD-->
     <androidx.cardview.widget.CardView
-        android:id="@+id/popUpCard"
+        android:id="@+id/displayBodyInfoCard"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:cardCornerRadius="30dp"
@@ -245,99 +247,93 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.90" />
 
-            <!--        Comanda-->
-            <TextView
-                android:id="@+id/txtComanda"
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/halfscreenBmr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.50" />
+
+            <!--        Diagnostic-->
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="@string/comanda"
+                android:text="@string/bmr"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toStartOf="@+id/halfscreenBmr"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/txtComandaNo"
+                android:id="@+id/textView14"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/kcals_you_are_burning_by_just_living"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toStartOf="@+id/halfscreenBmr"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+            <TextView
+                android:id="@+id/txtKcalBmr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="@string/orderno_placeholder"
+                android:text="@string/kcal_placeholder"
                 android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintStart_toEndOf="@id/txtComanda"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/halfscreenBmr"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!--        Data-->
             <TextView
-                android:id="@+id/txtDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="@string/data_order"
+                android:text="@string/recommended"
+                android:textColor="@color/black"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/guidelineTotalComanda"
+                app:layout_constraintEnd_toStartOf="@+id/halfscreenBmr"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtComanda" />
+                app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
             <TextView
-                android:id="@+id/txtDateOrdered"
-                android:layout_width="wrap_content"
+                android:id="@+id/textView15"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:fontFamily="@font/poppins_bold"
-                android:text="@string/date_placeholder"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/guidelineTotalComanda"
-                app:layout_constraintStart_toEndOf="@id/txtComanda"
-                app:layout_constraintTop_toBottomOf="@id/txtComandaNo" />
-
-            <!--        Data-->
-            <TextView
-                android:id="@+id/txtAmmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/poppins_bold"
-                android:text="@string/total_comanda"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/guidelineTopList"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/based_on_your_activity_level"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toStartOf="@+id/halfscreenBmr"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/guidelineTotalComanda" />
+                app:layout_constraintTop_toTopOf="@+id/guidelineTotalComanda" />
 
             <TextView
-                android:id="@+id/txtAmmountOrder"
+                android:id="@+id/txtKcalRecommended"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="@string/price_placeholder"
+                android:text="@string/kcal_placeholder"
+                android:textColor="@color/black"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/guidelineTopList"
-                app:layout_constraintStart_toEndOf="@id/txtComanda"
-                app:layout_constraintTop_toBottomOf="@id/guidelineTotalComanda" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/lvInvestigationOrdered"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/guidelineBottomList"
-                app:layout_constraintTop_toTopOf="@+id/guidelineTopList" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/halfscreenBmr"
+                app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
             <Button
-                android:id="@+id/btnGenerator"
+                android:id="@+id/btnChangeBodyDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/genereaza_factura"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="@string/change_body_details"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guidelineBottomList" />
+                app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

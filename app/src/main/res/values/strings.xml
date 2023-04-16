@@ -90,6 +90,13 @@
     </string>
     <string name="body_analysis">Body analysis</string>
     <string name="body_analysis_main">Body Analysis</string>
+    <string name="bmr">BMR:</string>
+    <string name="kcal_placeholder">2500kcal</string>
+    <string name="based_on_activity_level">Based on activity level:</string>
+    <string name="kcals_you_are_burning_by_just_living">Kcals burned naturally by the body</string>
+    <string name="recommended">Recommended</string>
+    <string name="based_on_your_activity_level">Based on your activity level</string>
+    <string name="change_body_details">Change body details</string>
     <string-array name="filterMedics">
         <item>orl</item>
         <item>alergologie</item>

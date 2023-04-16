@@ -1,5 +1,7 @@
 package com.example.licenta.Models;
 
+import com.example.licenta.Models.enums.Specialties;
+
 public class Specialty {
 
     private Integer id;

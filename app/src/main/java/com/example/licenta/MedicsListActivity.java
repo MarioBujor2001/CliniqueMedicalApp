@@ -33,8 +33,7 @@ import com.example.licenta.Models.Medic;
 import com.example.licenta.Models.Patient;
 import com.example.licenta.Models.Appointment;
 import com.example.licenta.Models.Specialty;
-import com.example.licenta.Models.Specialties;
-import com.example.licenta.Utils.APICommunication;
+import com.example.licenta.Models.enums.Specialties;
 import com.example.licenta.Utils.APICommunicationV2;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 

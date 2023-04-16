@@ -26,8 +26,7 @@ import com.example.licenta.Adapters.InvestigationAdapter;
 import com.example.licenta.Models.Investigation;
 import com.example.licenta.Models.Patient;
 import com.example.licenta.Models.Specialty;
-import com.example.licenta.Models.Specialties;
-import com.example.licenta.Utils.APICommunication;
+import com.example.licenta.Models.enums.Specialties;
 import com.example.licenta.Utils.APICommunicationV2;
 
 import org.json.JSONException;

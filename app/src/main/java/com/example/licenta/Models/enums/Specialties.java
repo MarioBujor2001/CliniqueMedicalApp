@@ -1,4 +1,4 @@
-package com.example.licenta.Models;
+package com.example.licenta.Models.enums;
 
 public enum Specialties {
     orl,
