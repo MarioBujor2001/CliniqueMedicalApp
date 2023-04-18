@@ -49,8 +49,8 @@ public class APICommunicationV2 {
     public static JSONObject bodyAnalysis;
     public static String encodedImage;
     public static boolean invalidAppointment = false;
-//    private final static String APIURL = "http://192.168.100.75:8080";
-    private final static String APIURL = "http://192.168.0.109:8080";
+    private final static String APIURL = "http://192.168.100.75:8080";
+//    private final static String APIURL = "http://192.168.0.109:8080";
     //        private final static String APIURL = "http://172.20.10.3:8080/api";
     private static StorageReference storageReference;
 

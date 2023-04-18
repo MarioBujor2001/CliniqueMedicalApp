@@ -25,7 +25,9 @@ import com.example.licenta.Models.enums.ActivityLevels;
 import com.example.licenta.Models.enums.Genders;
 import com.example.licenta.Utils.APICommunicationV2;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class BodyAnalysisActivity extends AppCompatActivity {
     //main view - entering body details
@@ -37,8 +39,9 @@ public class BodyAnalysisActivity extends AppCompatActivity {
 
     // displaying body info that is already there
     private CardView displayBodyInfoCard;
-    private TextView txtKcalBmr, txtKcalRecommended;
+    private TextView txtKcalBmr, txtKcalRecommended, txtDiagnosis;
     private Button btnChangeBodyDetails;
+    private EditText edtDiagnosisRecommendation;
 
     private Patient patient;
 
@@ -49,12 +52,39 @@ public class BodyAnalysisActivity extends AppCompatActivity {
             boolean isSucces = intent.getBooleanExtra("success", false);
             if (isSucces) {
                 loadBodyInfo();
+                loadDiagnosisInfo();
                 displayBodyInfoCard.setVisibility(View.VISIBLE);
             } else {
                 displayBodyInfoCard.setVisibility(View.GONE);
             }
         }
     };
+
+    private void loadDiagnosisInfo() {
+        try {
+            JSONArray diagnoses = APICommunicationV2.currentOBJ.getJSONArray("diagnoses");
+            if(diagnoses.length() == 0){
+                throw new JSONException("no diagnoses");
+            }
+            for(int i=0;i<diagnoses.length();i++){
+                JSONObject obj = diagnoses.getJSONObject(i);
+                txtDiagnosis.setText(txtDiagnosis.getText().toString() + " " +obj.getString("name"));
+                edtDiagnosisRecommendation
+                        .setText(edtDiagnosisRecommendation.getText().toString()+"\n"+
+                                obj.getString("name")+"\n");
+                JSONArray recomm = obj.getJSONArray("recommendations");
+                for(int j=0;j<recomm.length();j++){
+                    JSONObject r = recomm.getJSONObject(j);
+                    edtDiagnosisRecommendation
+                            .setText(edtDiagnosisRecommendation.getText().toString()+"\n"+
+                                    r.getString("description"));
+                }
+            }
+        } catch (JSONException e) {
+            txtDiagnosis.setVisibility(View.GONE);
+            edtDiagnosisRecommendation.setVisibility(View.GONE);
+        }
+    }
 
     private void loadBodyInfo() {
         try {
@@ -87,6 +117,8 @@ public class BodyAnalysisActivity extends AppCompatActivity {
         displayBodyInfoCard = findViewById(R.id.displayBodyInfoCard);
         txtKcalBmr = findViewById(R.id.txtKcalBmr);
         txtKcalRecommended = findViewById(R.id.txtKcalRecommended);
+        txtDiagnosis = findViewById(R.id.txtDiagnosis);
+        edtDiagnosisRecommendation = findViewById(R.id.edtDiagnosisRecommendation);
         btnChangeBodyDetails = findViewById(R.id.btnChangeBodyDetails);
         btnChangeBodyDetails.setOnClickListener(view -> {
             displayBodyInfoCard.setVisibility(View.GONE);

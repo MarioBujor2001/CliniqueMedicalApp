@@ -97,6 +97,7 @@
     <string name="recommended">Recommended</string>
     <string name="based_on_your_activity_level">Based on your activity level</string>
     <string name="change_body_details">Change body details</string>
+    <string name="you_are_diagnosed_with">You are diagnosed with:</string>
     <string-array name="filterMedics">
         <item>orl</item>
         <item>alergologie</item>
