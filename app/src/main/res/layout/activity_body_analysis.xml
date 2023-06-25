@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.06"/>
+        app:layout_constraintGuide_percent="0.07"/>
 
     <ImageView
         android:id="@+id/imageView2"
@@ -265,7 +265,7 @@
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/bmr"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/halfscreenBmr"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -277,6 +277,8 @@
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/kcals_you_are_burning_by_just_living"
                 android:textAlignment="center"
+                android:textSize="12sp"
+                android:layout_marginStart="3dp"
                 app:layout_constraintEnd_toStartOf="@+id/halfscreenBmr"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView13" />
@@ -300,7 +302,7 @@
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/recommended"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/halfscreenBmr"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView14" />
@@ -312,6 +314,8 @@
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/based_on_your_activity_level"
                 android:textAlignment="center"
+                android:textSize="12sp"
+                android:layout_marginStart="3dp"
                 app:layout_constraintEnd_toStartOf="@+id/halfscreenBmr"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guidelineTotalComanda" />

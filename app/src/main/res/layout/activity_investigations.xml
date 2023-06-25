@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.06"/>
+        app:layout_constraintGuide_percent="0.07"/>
 
     <ImageView
         android:id="@+id/imageView2"
@@ -96,7 +96,7 @@
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/current_total"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -110,7 +110,7 @@
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/price_placeholder"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView7"
                 app:layout_constraintTop_toTopOf="parent"

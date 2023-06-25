@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -168,6 +169,10 @@ public class APICommunicationV2 {
                             sendIntent("apiMessageSuccessReservation", true, ctx);
                         }
                     });
+            jsReq.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            queue.add(jsReq);
             queue.add(jsReq);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -247,6 +252,9 @@ public class APICommunicationV2 {
                         Log.e("Volley:", error.toString());
                     }
                 });
+        jsReq.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(jsReq);
     }
 
@@ -347,8 +355,11 @@ public class APICommunicationV2 {
                         Log.i("VolleyErrPostProg:", error.toString());
                     }
                 });
+        jsReq.setRetryPolicy(new DefaultRetryPolicy(
+                0,
+                -1,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(jsReq);
-
     }
 
     //MODIFIED

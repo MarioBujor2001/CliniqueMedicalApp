@@ -16,17 +16,16 @@
 
         <TextView
             android:id="@+id/txtInvestigationName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="15dp"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/name_of_investigation"
             android:textColor="#000000"
-            android:textSize="13sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline28"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline29"
             app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -35,11 +34,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="5dp"
             android:fontFamily="@font/poppins_medium"
             android:text="@string/price_placeholder"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="@+id/guideline28"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -47,11 +46,13 @@
             android:id="@+id/txtInvestigationSpecialty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:fontFamily="@font/poppins_medium"
             android:text="@string/specialitate_placeholder"
+            android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline28"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/txtInvestigationName"
             app:layout_constraintTop_toBottomOf="@+id/txtInvestigationName" />
 
         <!--        <androidx.cardview.widget.CardView-->
@@ -91,6 +92,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.75" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline28"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.55" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline29"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.03" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
