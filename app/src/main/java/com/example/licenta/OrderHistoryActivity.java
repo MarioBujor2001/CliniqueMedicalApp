@@ -224,31 +224,22 @@ public class OrderHistoryActivity extends AppCompatActivity {
         Paint paint = new Paint();
         Paint title = new Paint();
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(pagewidth, pageHeight, 1).create();
-
         PdfDocument.Page page = pdfDocument.startPage(pageInfo);
-
         Canvas canvas = page.getCanvas();
-
         title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-
         title.setTextSize(25);
         title.setFakeBoldText(true);
-
         title.setColor(ContextCompat.getColor(this, R.color.purple_200));
-
         canvas.drawText("Factura cu numarul: " + order.getId(), 50, 50, title);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            canvas.drawText("Din data de: " + order.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), 50, 80, title);
+            canvas.drawText("Din data de: " + order.getData()
+                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), 50, 80, title);
         }
-
-
         title.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
         title.setColor(ContextCompat.getColor(this, R.color.black));
         title.setTextSize(25);
-
         title.setStrokeWidth(5);
         canvas.drawLine(10, 150, pagewidth-10, 150, title);
-
         int startY = 200;
         for (Investigation i : order.getInvestigations()) {
             title.setTextAlign(Paint.Align.LEFT);
@@ -257,22 +248,19 @@ public class OrderHistoryActivity extends AppCompatActivity {
             canvas.drawText(String.valueOf(i.getPrice()) +" Ron", 700, startY, title);
             startY += 35;
         }
-
         canvas.drawLine(10, startY, pagewidth-10, startY, title);
         startY+=50;
         title.setTextAlign(Paint.Align.LEFT);
         canvas.drawText("Total:", 50, startY, title);
         title.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText(order.getTotal() +" Ron", 700, startY, title);
-
         pdfDocument.finishPage(page);
-
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "order_" + order.getId() + ".pdf");
-
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                "order_" + order.getId() + ".pdf");
         try {
-
             pdfDocument.writeTo(new FileOutputStream(file));
-            Toast.makeText(OrderHistoryActivity.this, "PDF file generated successfully, check downloads", Toast.LENGTH_SHORT).show();
+            Toast.makeText(OrderHistoryActivity.this, "PDF file generated successfully, check downloads",
+                    Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
         }

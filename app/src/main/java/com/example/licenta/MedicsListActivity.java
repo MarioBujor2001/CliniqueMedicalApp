@@ -215,7 +215,8 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
 
                 try {
                     JSONObject specObj = (JSONObject) currentMedic.get("specialty");
-                    m.setSpecialty(new Specialty(Specialties.valueOf(specObj.getString("type")), specObj.getString("description")));
+                    m.setSpecialty(new Specialty(Specialties.valueOf(specObj.getString("type")),
+                            specObj.getString("description")));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -255,7 +256,8 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
                 int mYear = cal.get(Calendar.YEAR);
                 int mMonth = cal.get(Calendar.MONTH);
                 int mDay = cal.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(MedicsListActivity.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(MedicsListActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         String date = "Data: ";

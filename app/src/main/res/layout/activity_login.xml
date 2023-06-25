@@ -7,53 +7,65 @@
     tools:context=".LoginActivity">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="300dp"
-        android:layout_height="400dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="20dp"
         app:cardCornerRadius="15dp"
-        android:elevation="20dp">
+        app:layout_constraintBottom_toTopOf="@+id/guideline20"
+        app:layout_constraintEnd_toStartOf="@+id/guideline22"
+        app:layout_constraintStart_toStartOf="@+id/guideline21"
+        app:layout_constraintTop_toTopOf="@+id/guideline19">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/info_card_background">
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.15" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.75" />
+
             <TextView
                 android:id="@+id/txtWelcome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:fontFamily="@font/poppins_bold"
                 android:text="@string/welcomingText"
                 android:textSize="18sp"
-                android:fontFamily="@font/poppins_bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline23"
                 app:layout_constraintVertical_bias="0.0" />
 
             <EditText
                 android:id="@+id/edtEmail"
-                android:layout_width="200dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:hint="@string/emailHint"
                 android:fontFamily="@font/poppins_medium"
+                android:hint="@string/emailHint"
+                android:inputType="textEmailAddress"
                 app:layout_constraintEnd_toEndOf="@+id/txtWelcome"
                 app:layout_constraintStart_toStartOf="@+id/txtWelcome"
-                app:layout_constraintTop_toBottomOf="@+id/txtWelcome"
-                android:inputType="textEmailAddress"/>
+                app:layout_constraintTop_toBottomOf="@+id/txtWelcome" />
 
             <EditText
                 android:id="@+id/edtPassword"
-                android:layout_width="200dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:hint="@string/passwordHint"
                 android:fontFamily="@font/poppins_medium"
+                android:hint="@string/passwordHint"
                 android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="@+id/edtEmail"
                 app:layout_constraintStart_toStartOf="@+id/edtEmail"
@@ -64,8 +76,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:text="@string/don_t_have_an_account"
                 android:fontFamily="@font/poppins_medium"
+                android:text="@string/don_t_have_an_account"
                 app:layout_constraintEnd_toEndOf="@+id/edtPassword"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/edtPassword"
@@ -75,9 +87,9 @@
                 android:id="@+id/txtRegister"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
                 android:text="@string/registerPrompt"
                 android:textColor="@color/CardBackgroudn"
-                android:fontFamily="@font/poppins_bold"
                 app:layout_constraintEnd_toEndOf="@+id/txtDontHaveAcc"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/txtDontHaveAcc"
@@ -88,13 +100,42 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:text="@string/loginButton"
                 android:fontFamily="@font/poppins_medium"
+                android:text="@string/loginButton"
+                app:layout_constraintBottom_toTopOf="@+id/guideline24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtRegister" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.08" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.91" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
