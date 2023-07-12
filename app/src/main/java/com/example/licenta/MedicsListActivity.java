@@ -2,6 +2,7 @@ package com.example.licenta;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,6 +45,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 public class MedicsListActivity extends AppCompatActivity implements RecyclerViewInterface {
@@ -60,11 +62,21 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
     private boolean nameSearchCriteria = true;
     private Button btnProgrameaza;
 
+    //overlay appointment
+    private CardView appointmentOverlay;
+    private Button btnChoseDate;
+    private Button btnChoseTime;
+    private Button btnVerifDisp;
+    private TextView tvNumeMedic;
+    private TextView tvData;
+    private TextView tvOra;
+    private EditText edtMotivVizita;
+
     public BroadcastReceiver receivedMedicsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             boolean isSucces = intent.getBooleanExtra("success", false);
-            if(isSucces){
+            if (isSucces) {
                 loadMedics();
                 reloadMedicsAdapter();
                 cancelLoadingDialog();
@@ -76,11 +88,11 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
         @Override
         public void onReceive(Context context, Intent intent) {
             boolean isSucces = intent.getBooleanExtra("success", false);
-            if(isSucces){
+            if (isSucces) {
                 if (!APICommunicationV2.invalidAppointment) {
                     btnProgrameaza.setEnabled(true);
                     Toast.makeText(MedicsListActivity.this, "This date is available", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     Toast.makeText(MedicsListActivity.this, "Date and time already taken", Toast.LENGTH_SHORT).show();
                 }
                 cancelLoadingDialog();
@@ -92,26 +104,26 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
         @Override
         public void onReceive(Context context, Intent intent) {
             boolean isSucces = intent.getBooleanExtra("success", false);
-            if(isSucces){
-                cancelLoadingDialog();
+            cancelLoadingDialog();
+            if (isSucces) {
                 Toast.makeText(MedicsListActivity.this, "Appointment made successfully!", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
+                appointmentOverlay.setVisibility(View.GONE);
             }
         }
     };
 
-    private void createLoadingDialog(){
+    private void createLoadingDialog() {
         progressDialog = new ProgressDialog(this);
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
     }
 
-    private void cancelLoadingDialog(){
+    private void cancelLoadingDialog() {
         progressDialog.dismiss();
     }
 
-    private void reloadMedicsAdapter(){
+    private void reloadMedicsAdapter() {
         adapter = new MedicAdapter(this, this);
         adapter.setMedici(medici);
         recvMedici.setAdapter(adapter);
@@ -125,9 +137,9 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
         LocalBroadcastManager.getInstance(this).registerReceiver(receiveAvailableReservation, new IntentFilter("apiMessageReservation"));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiveSuccessReservation, new IntentFilter("apiMessageSuccessReservation"));
         createLoadingDialog();
-        if(APICommunicationV2.mediciArray==null){
+        if (APICommunicationV2.mediciArray == null) {
             APICommunicationV2.getMedics(getApplicationContext());
-        }else{
+        } else {
             loadMedics();
             reloadMedicsAdapter();
             cancelLoadingDialog();
@@ -144,8 +156,8 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
         toggleGroup = findViewById(R.id.toggleMedicList);
         toggleGroup.check(R.id.btnToggleName);
         toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
-            if(isChecked){
-                switch (checkedId){
+            if (isChecked) {
+                switch (checkedId) {
                     case R.id.btnToggleName:
                         nameSearchCriteria = true;
                         searchDoctor.setHint(R.string.cauta_medic);
@@ -155,8 +167,8 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
                         searchDoctor.setHint(R.string.cauta_spec);
                         break;
                 }
-            }else{
-                if(group.getCheckedButtonId()==View.NO_ID){
+            } else {
+                if (group.getCheckedButtonId() == View.NO_ID) {
                     toggleGroup.check(R.id.btnToggleName);
                 }
             }
@@ -171,12 +183,12 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    if(nameSearchCriteria){
+                    if (nameSearchCriteria) {
                         filteredMedici = (ArrayList<Medic>) medici.stream()
                                 .filter(medic -> (medic.getFirstName() + medic.getLastName()).toLowerCase().contains(s.toString().toLowerCase()))
                                 .collect(Collectors.toList());
                         adapter.setMedici(filteredMedici);
-                    }else{
+                    } else {
                         filteredMedici = (ArrayList<Medic>) medici.stream()
                                 .filter(medic -> (medic.getSpecialty().toString()).contains(s.toString().toLowerCase()))
                                 .collect(Collectors.toList());
@@ -193,7 +205,16 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
 
             }
         });
-
+        //overlay init
+        appointmentOverlay = findViewById(R.id.appointmentOverlay);
+        btnChoseDate = findViewById(R.id.btnChoseDataPOP);
+        btnChoseTime = findViewById(R.id.btnChoseOraPOP);
+        btnVerifDisp = findViewById(R.id.btnVerifDispPOP);
+        tvNumeMedic = findViewById(R.id.tvNumeMedicProgramarePOP);
+        tvData = findViewById(R.id.tvDataPOP);
+        tvOra = findViewById(R.id.tvOraPOP);
+        edtMotivVizita = findViewById(R.id.edtMotivVizita);
+        btnProgrameaza = findViewById(R.id.btnProgrameazaPOP);
     }
 
     private void loadMedics() {
@@ -231,23 +252,13 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
     }
 
     public void createMedicPopUp(int position, boolean filtered) {
-
-        dialogBuilder = new AlertDialog.Builder(MedicsListActivity.this);
-        final View addPop = getLayoutInflater().inflate(R.layout.medic_popup, null);
+        appointmentOverlay.setVisibility(View.VISIBLE);
         Medic m;
         if (filtered) {
             m = filteredMedici.get(position);
         } else {
             m = medici.get(position);
         }
-        Button btnChoseDate = addPop.findViewById(R.id.btnChoseDataPOP);
-        Button btnChoseTime = addPop.findViewById(R.id.btnChoseOraPOP);
-        Button btnVerifDisp = addPop.findViewById(R.id.btnVerifDispPOP);
-        btnProgrameaza = addPop.findViewById(R.id.btnProgrameazaPOP);
-        TextView tvNumeMedic = addPop.findViewById(R.id.tvNumeMedicProgramarePOP);
-        TextView tvData = addPop.findViewById(R.id.tvDataPOP);
-        TextView tvOra = addPop.findViewById(R.id.tvOraPOP);
-        EditText edtMotivVizita = addPop.findViewById(R.id.edtMotivVizita);
         tvNumeMedic.setText("Dr. " + m.getFirstName() + " " + m.getLastName());
         btnChoseDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -258,23 +269,27 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
                 int mDay = cal.get(Calendar.DAY_OF_MONTH);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(MedicsListActivity.this,
                         new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        String date = "Data: ";
-                        if (dayOfMonth >= 10) {
-                            date += dayOfMonth + "/";
-                        } else {
-                            date += "0" + dayOfMonth + "/";
-                        }
-                        if (month + 1 >= 10) {
-                            date += (month + 1) + "/" + year;
-                        } else {
-                            date += "0" + (month + 1) + "/" + year;
-                        }
-                        tvData.setText(date);
-                        btnChoseTime.setEnabled(true);
-                    }
-                }, mYear, mMonth, mDay);
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                String date = "Data: ";
+                                if (dayOfMonth >= 10) {
+                                    date += dayOfMonth + "/";
+                                } else {
+                                    date += "0" + dayOfMonth + "/";
+                                }
+                                if (month + 1 >= 10) {
+                                    date += (month + 1) + "/" + year;
+                                } else {
+                                    date += "0" + (month + 1) + "/" + year;
+                                }
+                                if(validateDate(year, month+1, dayOfMonth)) {
+                                    tvData.setText(date);
+                                    btnChoseTime.setEnabled(true);
+                                }else{
+                                    Toast.makeText(MedicsListActivity.this, "Cannot make reservation in the past!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }, mYear, mMonth, mDay);
                 datePickerDialog.show();
             }
         });
@@ -302,8 +317,12 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
                                 } else {
                                     time += "0" + minute;
                                 }
-                                tvOra.setText(time);
-                                btnVerifDisp.setEnabled(true);
+                                if(validateDTime(hourOfDay, minute)){
+                                    tvOra.setText(time);
+                                    btnVerifDisp.setEnabled(true);
+                                }else{
+                                    Toast.makeText(MedicsListActivity.this, "Working hours 8:00-20:00, half hour increments!", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }, mHour, mMinute, false);
                 timePickerDialog.setTitle("Alege ora");
@@ -332,11 +351,26 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
                 createLoadingDialog();
             }
         });
-        dialogBuilder.setView(addPop);
-        dialog = dialogBuilder.create();
-        dialog.show();
-        dialog.getWindow().
-                setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    private boolean validateDate(int year, int month, int dayOfMonth) {
+        LocalDateTime now = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            now = LocalDateTime.now();
+            LocalDateTime selected = LocalDateTime.of(year,month, dayOfMonth,0,0);
+            return selected.isAfter(now);
+        }
+        return false;
+    }
+
+    private boolean validateDTime(int hourOfDay, int minute) {
+        if(hourOfDay < 8 || hourOfDay > 20){
+            return false;
+        }
+        if(minute != 0 && minute != 30){
+            return false;
+        }
+        return true;
     }
 
     private Appointment initProgramare(int position, boolean filtered, String data, String ora, String observatii) {
@@ -349,7 +383,7 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
         }
         prog.setMedic(m);
         prog.setPatient(p);
-        if(!observatii.equals("")){
+        if (!observatii.equals("")) {
             prog.setComments(observatii);
         }
         String dataOra = data.substring(6) + " " + ora.substring(5);
@@ -365,6 +399,15 @@ public class MedicsListActivity extends AppCompatActivity implements RecyclerVie
             createMedicPopUp(position, true);
         } else {
             createMedicPopUp(position, false);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (appointmentOverlay.getVisibility() == View.VISIBLE) {
+            appointmentOverlay.setVisibility(View.GONE);
+        } else {
+            finish();
         }
     }
 }

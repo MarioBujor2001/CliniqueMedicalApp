@@ -223,6 +223,9 @@ public class APICommunicationV2 {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             invalidAppointment = false;
+                            if(error.toString().contains("cannot be converted to JSONObject")){
+                               invalidAppointment = true;
+                            }
                             sendIntent("apiMessageReservation", true, ctx);
                             Log.e("VolleyPING:", error.toString());
                         }
