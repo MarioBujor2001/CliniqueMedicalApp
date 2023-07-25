@@ -1,5 +1,6 @@
-# Pacient management app for private hospitals/ clinics
+# Patient management app for private hospitals/ clinics
 This android app aims to be a custom solution for private hospitals and clinics, to help them manage pacient interaction with the business.
+Features:
 ![image](https://github.com/MarioBujor2001/CliniqueMedicalApp/assets/80053665/43a3fe31-51c4-4ba7-ab26-3419bedd2ed8)
 ![image](https://github.com/MarioBujor2001/CliniqueMedicalApp/assets/80053665/bcf93ad8-5cc1-4a8c-a400-efa1c1926920)
 ![image](https://github.com/MarioBujor2001/CliniqueMedicalApp/assets/80053665/e8655db3-288c-4c87-a0e4-1d95616d34d6)
